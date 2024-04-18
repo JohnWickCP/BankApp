@@ -14,7 +14,7 @@ public class App extends Application {
         Scene scene = new Scene(fxmlLoader.load(Objects.requireNonNull(getClass().getResource("/Fxml/Login.fxml")).openStream()));
         scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/login.css")).toExternalForm());
         stage.setScene(scene);
-        stage.setTitle("Bank");
+        stage.setTitle("CHBank");
         stage.show();
     }
 }

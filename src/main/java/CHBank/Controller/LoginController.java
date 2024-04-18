@@ -12,4 +12,5 @@ public class LoginController {
     public Label pass_add_label;
     public TextField pass_add_field;
     public Button login_button;
+    public Label error_label;
 }

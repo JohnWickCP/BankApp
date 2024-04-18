@@ -13,7 +13,7 @@
     -fx-fill: #FFFFFF;
 }
 
-.login_logo_container FontAwesoneIconView{
+.login_logo_container FontAwesoneIcon{
     -fx-fill: #ECF39E;
 }
 
@@ -56,9 +56,20 @@
     -fx-font-size: 1.2em;
 }
 
-.login_logo_container Button:hover{
+.login_form_container_but {
+    -fx-background-color: #132A13;
+    -fx-text-fill: #FFFFFF;
+    -fx-pref-width: 350;
+    -fx-pref-height: 30;
+    -fx-font-size: 1.2em;
     -fx-cursor: hand;
+}
 
+
+
+.login_container_label{
+    -fx-font-size: 1.1em;
+    -fx-font-weight: bold;
 }
 .error_lbl {
     -fx-text-fill: #FF0000;
