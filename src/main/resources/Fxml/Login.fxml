@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ChoiceBox?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.171" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CHBank.Controller.LoginController">
+   <VBox prefHeight="400.0" prefWidth="200.0" styleClass="login_logo_container" stylesheets="@../Styles/login.css" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.topAnchor="0.0">
+      <FontAwesomeIcon fill="#b1d326" glyphName="BANK" size="4em" />
+      <Text strokeType="OUTSIDE" strokeWidth="0.0" text="CHBank" />
+   </VBox>
+   <VBox layoutX="368.0" layoutY="26.0" prefHeight="344.0" prefWidth="356.0" styleClass="login_form_container" stylesheets="@../Styles/login.css" AnchorPane.bottomAnchor="36.0" AnchorPane.rightAnchor="20.0" AnchorPane.topAnchor="20.0">
+      <Label stylesheets="@../Styles/login.css" text="Choose your account type:" />
+      <ChoiceBox fx:id="acc_selector" prefWidth="150.0" styleClass="account_selector" stylesheets="@../Styles/login.css" />
+      <Label fx:id="payee_add_label" styleClass="login_form_container" stylesheets="@../Styles/login.css" text="Payee Address:" />
+      <TextField fx:id="payee_add_field" styleClass="input_filed" stylesheets="@../Styles/login.css" />
+      <Label fx:id="pass_add_label" styleClass="login_form_container" text="Password:" />
+      <TextField fx:id="pass_add_field" styleClass="input_filed" stylesheets="@../Styles/login.css" />
+      <Button fx:id="login_button" mnemonicParsing="false" text="Button" />
+      <Label fx:id="error_label" styleClass="error_lbl" text="Error:" />
+   </VBox>
+</AnchorPane>
