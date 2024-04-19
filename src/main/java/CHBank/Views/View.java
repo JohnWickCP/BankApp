@@ -15,7 +15,7 @@ import java.util.Objects;
 public class View {
     // Client views
     private AnchorPane dashboardView;
-
+    private AnchorPane transactionsView;
     public View() {}
 
     public AnchorPane getDashboardView() {
@@ -29,6 +29,16 @@ public class View {
         return dashboardView;
     }
 
+    public AnchorPane getTransactionsView() {
+        if (transactionsView == null) {
+            try {
+                transactionsView = new FXMLLoader(getClass().getResource("/Fxml/Client/Transaction.fxml")).load();
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return transactionsView;
+    }
 
     public void showLoginWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
