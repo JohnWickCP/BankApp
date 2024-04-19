@@ -21,14 +21,18 @@ public class ClientMenuController implements Initializable {
         addListener();
     }
     public void addListener(){
-        dashboard_but.setOnAction(event -> onDashboard());
-        transaction_but.setOnAction(actionEvent -> onTransaction());
+        dashboard_but.setOnAction(_ -> onDashboard());
+        transaction_but.setOnAction(_ -> onTransaction());
+        acc_but.setOnAction(_ -> onAccounts());
     }
     private void onDashboard(){
         Model.getInstance().getView().getClientSelectedMenuItem().set("Dashboard");
     }
     private void onTransaction(){
         Model.getInstance().getView().getClientSelectedMenuItem().set("Transaction");
+    }
+    private void onAccounts(){
+        Model.getInstance().getView().getClientSelectedMenuItem().set("Accounts");
     }
 }
 

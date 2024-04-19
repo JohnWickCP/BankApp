@@ -20,12 +20,13 @@ public class View {
     private final StringProperty clientSelectedMenuItem;
     private AnchorPane dashboardView;
     private AnchorPane transactionsView;
+    private AnchorPane accountsView;
 
     //
     public View() {
         this.clientSelectedMenuItem = new SimpleStringProperty("");
     }
-
+    /* Client Views Section*/
     public StringProperty getClientSelectedMenuItem() {
         return clientSelectedMenuItem;
     }
@@ -51,6 +52,18 @@ public class View {
             }
         }
         return transactionsView;
+    }
+
+    public AnchorPane getAccountsView() {
+        if (accountsView == null) {
+            try {
+                accountsView = new FXMLLoader(getClass().getResource("/Fxml/Client/Accounts.fxml")).load();
+                accountsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Accounts.css")).toExternalForm());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return accountsView;
     }
 
     public void showLoginWindow() {
