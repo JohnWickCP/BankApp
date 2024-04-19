@@ -1,6 +1,8 @@
 package CHBank.Views;
 
 import CHBank.Controller.Client.ClientController;
+import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.property.StringProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -14,10 +16,18 @@ import java.util.Objects;
 
 public class View {
     // Client views
+
+    private final StringProperty clientSelectedMenuItem;
     private AnchorPane dashboardView;
     private AnchorPane transactionsView;
-    public View() {}
 
+    //
+    public View() {
+        this.clientSelectedMenuItem = new SimpleStringProperty("");
+    }
+    public StringProperty getClientSelectedMenuItem() {
+        return clientSelectedMenuItem;
+    }
     public AnchorPane getDashboardView() {
         if (dashboardView == null) {
             try {

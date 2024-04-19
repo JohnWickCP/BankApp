@@ -1,5 +1,6 @@
 package CHBank.Controller.Client;
 
+import CHBank.Models.Model;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
@@ -17,7 +18,17 @@ public class ClientMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        addListener();
+    }
+    public void addListener(){
+        dashboard_but.setOnAction(event -> onDashboard());
+        transaction_but.setOnAction(actionEvent -> onTransaction());
+    }
+    private void onDashboard(){
+        Model.getInstance().getView().getClientSelectedMenuItem().set("Dashboard");
+    }
+    private void onTransaction(){
+        Model.getInstance().getView().getClientSelectedMenuItem().set("Transaction");
     }
 }
 
