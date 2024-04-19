@@ -25,9 +25,11 @@ public class View {
     public View() {
         this.clientSelectedMenuItem = new SimpleStringProperty("");
     }
+
     public StringProperty getClientSelectedMenuItem() {
         return clientSelectedMenuItem;
     }
+
     public AnchorPane getDashboardView() {
         if (dashboardView == null) {
             try {
@@ -43,6 +45,7 @@ public class View {
         if (transactionsView == null) {
             try {
                 transactionsView = new FXMLLoader(getClass().getResource("/Fxml/Client/Transaction.fxml")).load();
+                transactionsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Transaction.css")).toExternalForm());
             } catch (Exception e){
                 e.printStackTrace();
             }
@@ -66,6 +69,7 @@ public class View {
         stylesheets.add("/Styles/ClientMenu.css");
         createStage(loader, stylesheets);
     }
+
 
     private void createStage(FXMLLoader loader, List<String> stylesheets) {
         try {
