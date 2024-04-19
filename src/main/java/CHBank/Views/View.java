@@ -63,4 +63,7 @@ public class View {
         }
     }
 
+    public void closeStage (Stage stage) {
+        stage.close();
+    }
 }
