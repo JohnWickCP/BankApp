@@ -1,5 +1,6 @@
 package CHBank.Views;
 
+import CHBank.Controller.Admin.AdminController;
 import CHBank.Controller.Client.ClientController;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -22,9 +23,13 @@ public class View {
     private AnchorPane transactionsView;
     private AnchorPane accountsView;
 
+    // Admin views
+    private final StringProperty adminSelectedMenuItem;
+    private AnchorPane createClientsView;
     //
     public View() {
         this.clientSelectedMenuItem = new SimpleStringProperty("");
+        this.adminSelectedMenuItem = new SimpleStringProperty("");
     }
     /* Client Views Section*/
     public StringProperty getClientSelectedMenuItem() {
@@ -73,6 +78,21 @@ public class View {
         createStage(loader,stylesheets);
     }
 
+    /* Admin views section */
+    public StringProperty getAdminSelectedMenuItem(){
+
+    }
+
+    public AnchorPane getCreateClientsView() {
+        if (createClientsView == null) {
+            try {
+                createClientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/CreateClient.fxml")).load();
+            }
+            catch (Exception _){}
+        }
+        return createClientsView;
+    }
+
     public void showClientWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Client/Client.fxml"));
         ClientController clientController = new ClientController();
@@ -83,6 +103,15 @@ public class View {
         createStage(loader, stylesheets);
     }
 
+    public void showAdminWindow() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
+        AdminController adminController = new AdminController();
+        loader.setController(adminController);
+        List<String> stylesheets = new ArrayList<String>();
+        stylesheets.add("/Styles/CreateClient.css");
+        stylesheets.add("/Styles/AdminMenu.css");
+        createStage(loader, stylesheets);
+    }
 
     private void createStage(FXMLLoader loader, List<String> stylesheets) {
         try {
