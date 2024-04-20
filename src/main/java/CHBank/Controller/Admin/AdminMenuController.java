@@ -1,5 +1,6 @@
 package CHBank.Controller.Admin;
 
+import CHBank.Models.Model;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
@@ -14,6 +15,10 @@ public class AdminMenuController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-
+        addListener();
+    }
+    private void addListener(){}
+    private void onCreateClient(){
+        Model.getInstance().getView().getAdminSelectedMenuItem().set("CreteClient");
     }
 }
