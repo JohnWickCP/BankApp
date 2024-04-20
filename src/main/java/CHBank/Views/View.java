@@ -80,7 +80,7 @@ public class View {
 
     /* Admin views section */
     public StringProperty getAdminSelectedMenuItem(){
-
+        return getClientSelectedMenuItem();
     }
 
     public AnchorPane getCreateClientsView() {
