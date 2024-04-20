@@ -1,6 +1,7 @@
 package CHBank.Controller.Client;
 
 import CHBank.Models.Model;
+import CHBank.Views.ClientMenuOptions;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 
@@ -26,13 +27,13 @@ public class ClientMenuController implements Initializable {
         acc_but.setOnAction(_ -> onAccounts());
     }
     private void onDashboard(){
-        Model.getInstance().getView().getClientSelectedMenuItem().set("Dashboard");
+        Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.DASHBOARD);
     }
     private void onTransaction(){
-        Model.getInstance().getView().getClientSelectedMenuItem().set("Transaction");
+        Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.TRANSACTION);
     }
     private void onAccounts(){
-        Model.getInstance().getView().getClientSelectedMenuItem().set("Accounts");
+        Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.ACCOUNTS);
     }
 }
 

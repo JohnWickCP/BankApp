@@ -2,8 +2,8 @@ package CHBank.Views;
 
 import CHBank.Controller.Admin.AdminController;
 import CHBank.Controller.Client.ClientController;
-import javafx.beans.property.SimpleStringProperty;
-import javafx.beans.property.StringProperty;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
@@ -16,23 +16,33 @@ import java.util.Objects;
 
 
 public class View {
+    private AccountType loginAccountType;
     // Client views
 
-    private final StringProperty clientSelectedMenuItem;
+    private final ObjectProperty<ClientMenuOptions> clientSelectedMenuItem;
     private AnchorPane dashboardView;
     private AnchorPane transactionsView;
     private AnchorPane accountsView;
 
     // Admin views
-    private final StringProperty adminSelectedMenuItem;
+    private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
     private AnchorPane createClientsView;
     //
     public View() {
-        this.clientSelectedMenuItem = new SimpleStringProperty("");
-        this.adminSelectedMenuItem = new SimpleStringProperty("");
+        this.loginAccountType = AccountType.CLIENT;
+        this.clientSelectedMenuItem = new SimpleObjectProperty<>();
+        this.adminSelectedMenuItem = new SimpleObjectProperty<>();
+    }
+
+    public AccountType getLoginAccountType() {
+        return loginAccountType;
+    }
+
+    public void setLoginAccountType(AccountType loginAccountType) {
+        this.loginAccountType = loginAccountType;
     }
     /* Client Views Section*/
-    public StringProperty getClientSelectedMenuItem() {
+    public ObjectProperty<ClientMenuOptions> getClientSelectedMenuItem() {
         return clientSelectedMenuItem;
     }
 
@@ -79,8 +89,8 @@ public class View {
     }
 
     /* Admin views section */
-    public StringProperty getAdminSelectedMenuItem(){
-        return getClientSelectedMenuItem();
+    public ObjectProperty<AdminMenuOptions> getAdminSelectedMenuItem(){
+        return adminSelectedMenuItem;
     }
 
     public AnchorPane getCreateClientsView() {
@@ -88,7 +98,9 @@ public class View {
             try {
                 createClientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/CreateClient.fxml")).load();
             }
-            catch (Exception _){}
+            catch (Exception e){
+                e.printStackTrace();
+            }
         }
         return createClientsView;
     }
