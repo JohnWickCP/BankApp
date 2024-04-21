@@ -19,6 +19,7 @@
 
 .account_selector {
     -fx-background-color: #ecf39e;
+    -fx-font-weight: bold;
 }
 
 .account_selector .label{
