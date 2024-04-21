@@ -25,7 +25,7 @@ public class LoginController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        acc_selector.setItems(FXCollections.observableArrayList(AccountType.AMIN, AccountType.CLIENT));
+        acc_selector.setItems(FXCollections.observableArrayList(AccountType.ADMIN, AccountType.CLIENT));
         acc_selector.setValue(Model.getInstance().getView().getLoginAccountType());
         acc_selector.valueProperty().addListener(observable -> Model.getInstance().getView().setLoginAccountType(acc_selector.getValue()));
         login_button.setOnAction(event -> onLogin());
@@ -34,7 +34,7 @@ public class LoginController implements Initializable {
     private void onLogin() {
         Stage stage = (Stage) error_label.getScene().getWindow();
         Model.getInstance().getView().closeStage(stage);
-        if (Model.getInstance().getView().getLoginAccountType() == AccountType.AMIN) {
+        if (Model.getInstance().getView().getLoginAccountType() == AccountType.ADMIN) {
             Model.getInstance().getView().showAdminWindow();
         } else Model.getInstance().getView().showClientWindow();
     }
