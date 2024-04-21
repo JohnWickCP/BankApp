@@ -7,6 +7,7 @@ import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
+import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -27,6 +28,7 @@ public class View {
     // Admin views
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
     private AnchorPane createClientsView;
+    private AnchorPane clientsView;
     //
     public View() {
         this.loginAccountType = AccountType.CLIENT;
@@ -50,6 +52,7 @@ public class View {
         if (dashboardView == null) {
             try {
                 dashboardView = new FXMLLoader(getClass().getResource("/Fxml/Client/Dashboard.fxml")).load();
+                dashboardView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Dashboard.css")).toExternalForm());
             } catch (Exception e) {
                 e.printStackTrace();
             }
@@ -97,12 +100,25 @@ public class View {
         if (createClientsView == null) {
             try {
                 createClientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/CreateClient.fxml")).load();
+                clientsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/CreateClient.css")).toExternalForm());
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
         return createClientsView;
+    }
+
+    public AnchorPane getClientsView() {
+        if (clientsView == null) {
+            try {
+                clientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Clients.fxml")).load();
+                clientsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Clients.css")).toExternalForm());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return clientsView;
     }
 
     public void showClientWindow() {

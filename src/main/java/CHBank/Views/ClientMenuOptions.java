@@ -4,6 +4,4 @@ public enum ClientMenuOptions {
     DASHBOARD,
     TRANSACTION,
     ACCOUNTS
-
-
 }
