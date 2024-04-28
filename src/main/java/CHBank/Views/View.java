@@ -29,6 +29,7 @@ public class View {
     private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
     private AnchorPane createClientsView;
     private AnchorPane clientsView;
+    private AnchorPane depositsView;
     //
     public View() {
         this.loginAccountType = AccountType.CLIENT;
@@ -119,6 +120,18 @@ public class View {
             }
         }
         return clientsView;
+    }
+
+    public AnchorPane getDepositsView() {
+        if (depositsView == null){
+            try {
+                depositsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Deposit.fxml")).load();
+                depositsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Deposit.css")).toExternalForm());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return depositsView;
     }
 
     public void showClientWindow() {
