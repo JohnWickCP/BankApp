@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.control.TextField?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Text?>
+
+<AnchorPane prefHeight="750.0" prefWidth="850.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CHBank.Controller.Admin.DepositController">
+   <VBox layoutX="391.0" layoutY="222.0" prefHeight="570.0" prefWidth="820.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="100.0">
+      <HBox alignment="CENTER" prefHeight="60.0" prefWidth="820.0" styleClass="search_box">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Search By Payee Address: " />
+         <TextField fx:id="pAddress_field" />
+         <Button fx:id="search_button" mnemonicParsing="false" text="SEARCH">
+            <graphic>
+               <FontAwesomeIcon fill="WHITE" glyphName="SEARCH" size="1.7em" />
+            </graphic>
+         </Button>
+      </HBox>
+      <ListView fx:id="result_listview" prefHeight="200.0" prefWidth="820.0" styleClass="search_box" />
+      <VBox alignment="TOP_CENTER" prefHeight="325.0" prefWidth="100.0" styleClass="deposit_box">
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Deposit Section" />
+         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Amount:" />
+         <TextField fx:id="Amount_filed" maxHeight="-Infinity" maxWidth="-Infinity" />
+         <Button fx:id="deposit_button" mnemonicParsing="false" text="Deposit">
+            <graphic>
+               <FontAwesomeIcon fill="#fcf9f9" glyphName="MONEY" size="1.5em" />
+            </graphic>
+         </Button>
+      </VBox>
+   </VBox>
+</AnchorPane>
