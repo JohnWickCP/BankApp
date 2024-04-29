@@ -29,18 +29,18 @@
          </Button>
          <Button fx:id="acc_but" mnemonicParsing="false" styleClass="menu_container_but" text="Accounts">
             <graphic>
-               <FontAwesomeIcon glyphName="USER" size="1.5em" text="" />
+               <FontAwesomeIcon glyphName="INBOX" size="1.5em" />
             </graphic>
          </Button>
          <Line endX="120.0" />
          <Button fx:id="profile_but" mnemonicParsing="false" text="Profile">
-            <graphic>
-               <FontAwesomeIcon fill="WHITE" glyphName="USER" size="1.5em" text="" />
-            </graphic>
             <styleClass>
                <String fx:value="menu_container_but" />
                <String fx:value="alt_menu_btn" />
             </styleClass>
+            <graphic>
+               <FontAwesomeIcon fill="WHITE" glyphName="USER" size="1.5em" />
+            </graphic>
          </Button>
          <Button fx:id="logout_but" mnemonicParsing="false" text="Logout">
             <graphic>
