@@ -7,12 +7,14 @@ public class DatabaseDriver {
 
     public DatabaseDriver() {
         try{
+            Class.forName("org.sqlite.JDBC");
             this.connection = DriverManager.getConnection("jdbc:sqlite:bank.db");
         } catch (SQLException e) {
             e.printStackTrace();
+        } catch (ClassNotFoundException e) {
+            throw new RuntimeException(e);
         }
     }
-
 
     /* Client Section */
 

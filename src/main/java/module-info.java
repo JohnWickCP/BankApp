@@ -4,6 +4,8 @@ module com.example.bankapp {
     requires fontawesomefx;
     requires com.dlsc.formsfx;
     requires java.sql;
+    requires sqlite.jdbc;
+
 
     opens CHBank to javafx.fxml;
     exports CHBank.Controller;
@@ -12,6 +14,5 @@ module com.example.bankapp {
     exports CHBank.Controller.Admin;
     exports CHBank.Views;
     exports CHBank.Models;
-
 
 }
