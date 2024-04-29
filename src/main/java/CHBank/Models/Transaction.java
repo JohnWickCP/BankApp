@@ -1,16 +1,30 @@
 package CHBank.Models;
 
-import javafx.application.Application;
+import javafx.beans.property.*;
 import javafx.stage.Stage;
 
-public class Transaction extends Application {
+import java.time.LocalDate;
 
-    public static void main(String[] args) {
-        launch(args);
+public class Transaction  {
+
+    private final StringProperty sender;
+    private final StringProperty receiver;
+    private final DoubleProperty amount;
+    private final ObjectProperty<LocalDate> date;
+    private final StringProperty message;
+
+
+    public Transaction(String sender, String receiver, Double amount, LocalDate date, String message) {
+        this.sender = new SimpleStringProperty(this, "sender", sender);
+        this.receiver = new SimpleStringProperty(this, "receiver", receiver);
+        this.amount = new SimpleDoubleProperty(this, "amount", amount);
+        this.date = new SimpleObjectProperty<>(this, "date", date);
+        this.message = new SimpleStringProperty(this, "message", message);
     }
+    public StringProperty senderProperty() {return this.sender;}
+    public StringProperty receiverProperty() {return this.receiver;}
+    public DoubleProperty amountProperty() {return this.amount;}
+    public ObjectProperty<LocalDate> dateProperty() {return this.date;}
+    public StringProperty messageProperty() {return this.message;}
 
-    @Override
-    public void start(Stage primaryStage) {
-
-    }
 }
