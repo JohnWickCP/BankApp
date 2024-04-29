@@ -35,14 +35,14 @@ public class LoginController implements Initializable {
         Stage stage = (Stage) error_label.getScene().getWindow();
         if (Model.getInstance().getView().getLoginAccountType() == AccountType.CLIENT) {
             // Evaluate Client Login Credentials
-            Model.getInstance().evaluatedClientCred(pass_add_field.getText(), pass_add_label.getText());
+            Model.getInstance().evaluatedClientCred(payee_add_label.getText(), pass_add_label.getText());
             if (Model.getInstance().getClientLoginSuccessFlag()){
                 Model.getInstance().getView().showClientWindow();
                 // Close the login stage
                 Model.getInstance().getView().closeStage(stage);
             } else {
+                payee_add_field.setText("");
                 pass_add_field.setText("");
-                pass_add_label.setText("");
                 error_label.setText("No Such Login Credentials");
 
             }

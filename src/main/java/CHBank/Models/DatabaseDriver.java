@@ -16,6 +16,7 @@ public class DatabaseDriver {
         }
     }
 
+
     /* Client Section */
 
     public ResultSet getClientData(String pAddress, String pPassword) {
