@@ -14,7 +14,7 @@ public class Model {
     private AccountType loginAccountType = AccountType.CLIENT;
 
     // Client Data Section
-    private Client client;
+    private final Client client;
     private boolean clientLoginSuccessFlag;
 
     private Model(){
@@ -44,11 +44,12 @@ public class Model {
     public void setLoginAccountType(AccountType loginAccountType) {
         this.loginAccountType = loginAccountType;
     }
-    /* client method Section
+
+    /* Client Method Section
      */
     public boolean getClientLoginSuccessFlag() {return clientLoginSuccessFlag;}
 
-    public void setClientLoginSuccessFlag(boolean clientLoginSuccessFlag) {this.clientLoginSuccessFlag = clientLoginSuccessFlag;}
+    public void setClientLoginSuccessFlag(boolean flag) {this.clientLoginSuccessFlag = flag;}
 
     public Client getClient() {return client;}
 
