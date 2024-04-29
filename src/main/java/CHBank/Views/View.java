@@ -6,6 +6,7 @@ import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
 import javafx.stage.Stage;
@@ -161,7 +162,8 @@ public class View {
                 scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(stylesheet)).toExternalForm());
             }
             Stage stage = new Stage();
-
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/BankIcon.png"))));
+            stage.setResizable(false);
             stage.setScene(scene);
             stage.setTitle("CHBank");
             stage.show();
