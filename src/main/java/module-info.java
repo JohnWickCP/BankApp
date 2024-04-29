@@ -3,6 +3,7 @@ module com.example.bankapp {
     requires javafx.fxml;
     requires fontawesomefx;
     requires com.dlsc.formsfx;
+    requires java.sql;
 
     opens CHBank to javafx.fxml;
     exports CHBank.Controller;
