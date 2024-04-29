@@ -1,5 +1,6 @@
 package CHBank.Controller.Client;
 
+import CHBank.Models.Transaction;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -15,6 +16,10 @@ public class TransactionCellController implements Initializable {
     public Label receiver_label;
     public Label amount_label;
 
+    private final Transaction transaction;
+    public TransactionCellController(Transaction transaction) {
+        this.transaction = transaction;
+    }
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
