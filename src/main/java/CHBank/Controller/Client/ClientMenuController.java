@@ -4,6 +4,7 @@ import CHBank.Models.Model;
 import CHBank.Views.ClientMenuOptions;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.stage.Stage;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -25,6 +26,7 @@ public class ClientMenuController implements Initializable {
         dashboard_but.setOnAction(_ -> onDashboard());
         transaction_but.setOnAction(_ -> onTransaction());
         acc_but.setOnAction(_ -> onAccounts());
+        logout_but.setOnAction(_ -> onLogout());
     }
     private void onDashboard(){
         Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.DASHBOARD);
@@ -34,6 +36,16 @@ public class ClientMenuController implements Initializable {
     }
     private void onAccounts(){
         Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.ACCOUNTS);
+    }
+    private void onLogout() {
+        // Get Stage
+        Stage stage = (Stage) dashboard_but.getScene().getWindow();
+        // Close the client window
+        Model.getInstance().getView().closeStage(stage);
+        // Show login window
+        Model.getInstance().getView().showLoginWindow();
+        // Set Client login Success Flag to false
+        Model.getInstance().setClientLoginSuccessFlag(false);
     }
 }
 
