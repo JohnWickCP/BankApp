@@ -11,11 +11,13 @@ public class Model {
     private static Model model;
     private final View view;
     private final DatabaseDriver databaseDriver;
-    private AccountType loginAccountType = AccountType.CLIENT;
+
 
     // Client Data Section
     private final Client client;
     private boolean clientLoginSuccessFlag;
+    // Admin Data section
+    private boolean adminLoginSuccessFlag;
 
     private Model(){
         this.databaseDriver = new DatabaseDriver();
@@ -23,6 +25,9 @@ public class Model {
         // Client Data Section
         this.clientLoginSuccessFlag = false;
         this.client =  new Client("", "", "", null, null, null);
+        // Admin Data Section
+        this.adminLoginSuccessFlag = false;
+
     }
 
     public static synchronized Model getInstance(){
@@ -37,13 +42,6 @@ public class Model {
     }
     public DatabaseDriver getDatabaseDriver() {return databaseDriver;}
 
-    public AccountType getLoginAccountType() {
-        return loginAccountType;
-    }
-
-    public void setLoginAccountType(AccountType loginAccountType) {
-        this.loginAccountType = loginAccountType;
-    }
 
     /* Client Method Section
      */
@@ -66,6 +64,21 @@ public class Model {
                 LocalDate date = LocalDate.of(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[2]));
                 this.client.DateCreated().set(date);
                 this.clientLoginSuccessFlag = true;
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+
+    // Admin method section
+    public boolean getAdminLoginSuccessFlag() {return adminLoginSuccessFlag;}
+    public void setAdminLoginSuccessFlag(boolean flag) {this.adminLoginSuccessFlag = flag;}
+
+    public void evaluateAdminCred(String username, String password ){
+        ResultSet resultSet = databaseDriver.getAdminData(username, password);
+        try {
+            if (resultSet.isBeforeFirst()){
+                this.adminLoginSuccessFlag = true;
             }
         } catch (Exception e) {
             e.printStackTrace();
