@@ -19,4 +19,6 @@ public abstract class Account {
     public StringProperty ownerProperty() {return owner;}
     public StringProperty accountNumberProperty() {return accountNumber;}
     public DoubleProperty balanceProperty() {return balance;}
+
+    public void setBalance(Double balance) {this.balance.set(balance);}
 }
