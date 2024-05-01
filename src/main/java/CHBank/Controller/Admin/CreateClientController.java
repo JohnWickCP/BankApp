@@ -1,5 +1,7 @@
 package CHBank.Controller.Admin;
 
+import java.text.Normalizer;
+import java.util.regex.Pattern;
 import CHBank.Models.Model;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -92,10 +94,17 @@ public class CreateClientController implements Initializable {
         }
     }
 
-    private String createPayeeAddress(){
+    private String createPayeeAddress() {
         int id = Model.getInstance().getDatabaseDriver().getLastClientId() + 1;
-        char fChar = Character.toLowerCase(firstname_filed.getText().charAt(0));
-        String address = "@" + fChar + lastname_file.getText() + id;
+        String firstName = firstname_filed.getText().trim();
+        String lastName = lastname_file.getText().trim();
+
+        // Loại bỏ các dấu từ các tên
+        firstName = removeAccents(firstName);
+        lastName = removeAccents(lastName);
+
+        char firstChar = Character.toLowerCase(firstName.charAt(0));
+        String address = "@" + firstChar + lastName + id;
         return address.replaceAll("\\s+", "");
     }
 
@@ -108,6 +117,12 @@ public class CreateClientController implements Initializable {
         check_amount_field.clear();
         save_acc_box.setSelected(false);
         save_amount_filed.clear();
+    }
 
+    // Phương thức để loại bỏ các dấu từ các chuỗi
+    private String removeAccents(String input) {
+        String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
+        Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");
+        return pattern.matcher(normalized).replaceAll("");
     }
 }

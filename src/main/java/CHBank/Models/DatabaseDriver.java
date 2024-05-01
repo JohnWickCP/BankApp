@@ -4,50 +4,43 @@ import java.sql.*;
 import java.time.LocalDate;
 
 public class DatabaseDriver {
+    private static final String DATABASE_URL = "jdbc:sqlite:bank.db";
     private Connection connection;
 
     public DatabaseDriver() {
-        try{
-            Class.forName("org.sqlite.JDBC");
-            this.connection = DriverManager.getConnection("jdbc:sqlite:bank.db");
-        } catch (SQLException e) {
-            e.printStackTrace();
-        } catch (ClassNotFoundException e) {
-            throw new RuntimeException(e);
-        }
+        openConnection();
     }
 
-    public void openConnection() {
+    private void openConnection() {
         try {
-            if (this.connection != null && !this.connection.isClosed()) {
-                //System.out.println("Connection is already open.");
-            } else {
-                this.connection = DriverManager.getConnection("jdbc:sqlite:bank.db");
-                //System.out.println("Connection opened successfully.");
+            if (connection == null || connection.isClosed()) {
+                connection = DriverManager.getConnection(DATABASE_URL);
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to open connection to database.", e);
         }
     }
 
-    public void closeConnection() {
+    private void closeConnection() {
         try {
-            if (this.connection != null && !this.connection.isClosed()) {
-                this.connection.close();
-                //System.out.println("Connection closed successfully.");
-            } else {
-                //System.out.println("Connection is already closed.");
+            if (connection != null && !connection.isClosed()) {
+                connection.close();
             }
         } catch (SQLException e) {
-            e.printStackTrace();
+            throw new RuntimeException("Failed to close connection to database.", e);
         }
     }
 
-
+    private void executeStatement(String sql) throws SQLException {
+        openConnection();
+        try (Statement statement = connection.createStatement()) {
+            statement.execute(sql);
+        }
+    }
     /* Client Section */
 
     public ResultSet getClientData(String pAddress, String pPassword) {
-        openConnection();
+      //  openConnection();
         Statement statement;
         ResultSet resultSet = null;
         try {
@@ -55,8 +48,6 @@ public class DatabaseDriver {
             resultSet = statement.executeQuery("SELECT * FROM Clients WHERE PayeeAddress = '"+pAddress+"' AND Password ='"+pPassword+"';");
         } catch (Exception e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return resultSet;
     }
@@ -66,7 +57,6 @@ public class DatabaseDriver {
     /* Admin Section */
 
     public ResultSet getAdminData(String username, String pPassword) {
-        openConnection();
         Statement statement;
         ResultSet resultSet = null;
         try {
@@ -74,8 +64,6 @@ public class DatabaseDriver {
             resultSet = statement.executeQuery("SELECT * FROM Admins WHERE Username = '"+username+"' AND Password ='"+pPassword+"';");
         } catch (Exception e){
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return resultSet;
     }
@@ -125,12 +113,23 @@ public class DatabaseDriver {
         } finally {
             closeConnection();
         }
+    }
 
+    public ResultSet getAllClientsData(){
+
+        Statement statement;
+        ResultSet resultSet = null;
+        try {
+            statement = this.connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM Clients");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
     /* Utility Methods */
     public int getLastClientId(){
-        openConnection();
         Statement statement;
         ResultSet resultSet ;
         int id = 0 ;
@@ -140,9 +139,32 @@ public class DatabaseDriver {
             id = resultSet.getInt("seq");
         } catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
         return id;
+    }
+
+    public ResultSet getCheckingAccountData(String pAddress){
+        Statement statement;
+        ResultSet resultSet = null;
+        try {
+            statement = this.connection.createStatement();
+            resultSet = statement.executeQuery("SELECT  * FROM CheckingAccounts WHERE Owner = '"+pAddress+"'");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getSavingsAccountData(String pAddress){
+
+        Statement statement;
+        ResultSet resultSet = null;
+        try {
+            statement = this.connection.createStatement();
+            resultSet = statement.executeQuery("SELECT  * FROM SavingsAccounts WHERE Owner = '"+pAddress+"'");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }
