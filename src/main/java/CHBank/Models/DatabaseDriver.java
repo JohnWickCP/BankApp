@@ -1,8 +1,5 @@
 package CHBank.Models;
 
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
-
 import java.sql.*;
 import java.time.LocalDate;
 
@@ -43,7 +40,6 @@ public class DatabaseDriver {
     /* Client Section */
 
     public ResultSet getClientData(String pAddress, String pPassword) {
-      //  openConnection();
         Statement statement;
         ResultSet resultSet = null;
         try {
@@ -55,7 +51,17 @@ public class DatabaseDriver {
         return resultSet;
     }
 
-
+    public ResultSet getTransactions(String pAddress, int limit){
+        Statement statement;
+        ResultSet resultSet = null;
+        try {
+            statement = this.connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM Transactions WHERE Sender = '"+pAddress+"' OR Receiver = '"+pAddress+"' LIMIT "+limit+";");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
 
     /* Admin Section */
 

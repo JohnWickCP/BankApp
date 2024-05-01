@@ -5,8 +5,6 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
-import java.sql.SQLException;
-import java.sql.Statement;
 import java.time.LocalDate;
 
 public class Model {
@@ -18,6 +16,8 @@ public class Model {
     // Client Data Section
     private final Client client;
     private boolean clientLoginSuccessFlag;
+    private final ObservableList<Transaction> latestTransactions;
+    private final ObservableList<Transaction> allTransactions;
 
     // Admin Data section
     private boolean adminLoginSuccessFlag;
@@ -31,6 +31,9 @@ public class Model {
 
         this.clientLoginSuccessFlag = false;
         this.client =  new Client("", "", "", null, null, null);
+        this.latestTransactions = FXCollections.observableArrayList();
+        this.allTransactions = FXCollections.observableArrayList();
+
 
         // Admin Data Section
 
@@ -81,6 +84,38 @@ public class Model {
         }
     }
 
+    private void prepareTransactions(ObservableList<Transaction> transactions, int limit){
+        ResultSet resultSet = databaseDriver.getTransactions(this.client.pAddress().get(), limit);
+        try {
+            while (resultSet.next()){
+                String sender = resultSet.getString("Sender");
+                String receiver = resultSet.getString("Receiver");
+                double amount = resultSet.getDouble("Amount");
+                String[] dateParts  =resultSet.getString("Date").split("-");
+                LocalDate date = LocalDate.of(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[2]));
+                String message = resultSet.getString("Message");
+                transactions.add(new Transaction(sender, receiver, amount, date, message));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+    }
+
+    public void setLatestTransactions(){
+        prepareTransactions(this.latestTransactions, 4);
+    }
+
+    public ObservableList<Transaction> getLatestTransactions(){
+        return latestTransactions;
+    }
+
+    public void setAllTransactions(){
+        prepareTransactions(this.allTransactions, -1);
+    }
+
+    public ObservableList<Transaction> getAllTransactions(){
+        return allTransactions;
+    }
     // Admin method section
     public boolean getAdminLoginSuccessFlag() {return adminLoginSuccessFlag;}
     public void setAdminLoginSuccessFlag(boolean flag) {this.adminLoginSuccessFlag = flag;}
