@@ -1,10 +1,15 @@
 package CHBank.Controller.Client;
 
+import CHBank.Models.Model;
+import CHBank.Models.Transaction;
+import javafx.beans.binding.Binding;
+import javafx.beans.binding.Bindings;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
 
 import java.net.URL;
+import java.time.LocalDate;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -15,7 +20,7 @@ public class DashboardController implements Initializable {
     public Label savings_bal;
     public Label income_label;
     public Label expense_label;
-    public ListView transaction_listview;
+    public ListView<Transaction> transaction_listview;
     public TextField payee_field;
     public TextField amount_filed;
     public TextArea message_field;
@@ -24,5 +29,15 @@ public class DashboardController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        bindData();
+    }
+
+    private void bindData(){
+        user_name.textProperty().bind(Bindings.concat("Hi, ").concat(Model.getInstance().getClient().FirstName()));
+        login_date.setText("Today, " + LocalDate.now());
+        checking_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
+        checking_acc_num.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().accountNumberProperty());
+        savings_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
+        saving_acc_num.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().accountNumberProperty());
     }
 }
