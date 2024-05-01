@@ -4,6 +4,7 @@ import CHBank.Models.Model;
 import CHBank.Models.Transaction;
 import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.paint.Color;
 
@@ -17,6 +18,7 @@ public class TransactionCellController implements Initializable {
     public Label sender_label;
     public Label receiver_label;
     public Label amount_label;
+    public Button message_button;
 
     private final Transaction transaction;
     public TransactionCellController(Transaction transaction) {
@@ -28,6 +30,7 @@ public class TransactionCellController implements Initializable {
         receiver_label.textProperty().bind(transaction.receiverProperty());
         amount_label.textProperty().bind(transaction.amountProperty().asString());
         trans_date_label.textProperty().bind(transaction.dateProperty().asString());
+        message_button.setOnAction(e -> Model.getInstance().getView().showMessageWindow(transaction.senderProperty().get(), transaction.messageProperty().get()));
         transactionIcon();
     }
 

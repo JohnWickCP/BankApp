@@ -24,6 +24,11 @@
     -fx-stroke: #EEEEEE;
 }
 
+.message_button{
+    -fx-background-color: #FFFFFF;
+    -fx-fill: #132A13;
+    -fx-cursor: hand;
+}
 .trans_amount_label {
     -fx-background-color: #132A13;
     -fx-text-fill: #FFFFFF;

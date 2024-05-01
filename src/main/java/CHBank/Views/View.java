@@ -5,10 +5,15 @@ import CHBank.Controller.Client.ClientController;
 import javafx.beans.property.ObjectProperty;
 import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXMLLoader;
+import javafx.geometry.Pos;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.StackPane;
+import javafx.scene.layout.VBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -155,6 +160,23 @@ public class View {
         createStage(loader, stylesheets);
     }
 
+    public void showMessageWindow(String pAddress, String pMessage) {
+        StackPane pane = new StackPane();
+        VBox vbox = new VBox(5);
+        vbox.setAlignment(Pos.CENTER);
+        javafx.scene.control.Label sender = new Label(pAddress) ;
+        javafx.scene.control.Label message = new Label(pMessage);
+        vbox.getChildren().addAll(sender, message);
+        pane.getChildren().add(vbox);
+        Scene scene = new Scene(pane, 300, 100);
+        Stage stage = new Stage();
+        stage.getIcons().add(new Image(Objects.requireNonNull(getClass().getResource("/Images/BankIcon.png")).toExternalForm()));
+        stage.setResizable(false);
+        stage.initModality(Modality.APPLICATION_MODAL);
+        stage.setTitle("Message");
+        stage.setScene(scene);
+        stage.show();
+    }
     private void createStage(FXMLLoader loader, List<String> stylesheets) {
         try {
             Scene scene = new Scene(loader.load());
