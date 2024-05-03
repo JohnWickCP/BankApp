@@ -30,7 +30,7 @@ public class TransactionCellController implements Initializable {
         receiver_label.textProperty().bind(transaction.receiverProperty());
         amount_label.textProperty().bind(transaction.amountProperty().asString());
         trans_date_label.textProperty().bind(transaction.dateProperty().asString());
-        message_button.setOnAction(e -> Model.getInstance().getView().showMessageWindow(transaction.senderProperty().get(), transaction.messageProperty().get()));
+        message_button.setOnAction(_ -> Model.getInstance().getView().showMessageWindow(transaction.senderProperty().get(), transaction.messageProperty().get()));
         transactionIcon();
     }
 

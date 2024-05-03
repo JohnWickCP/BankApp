@@ -83,7 +83,7 @@ public class DatabaseDriver {
   // Phương thức + or - theo dấu
     public void updateBalance(String pAddress, double amount, String operation) {
         Statement statement;
-        ResultSet resultSet = null;
+        ResultSet resultSet;
         try {
             statement = this.connection.createStatement();
             resultSet = statement.executeQuery("SELECT * FROM SavingsAccounts WHERE Owner = '"+pAddress+"';");

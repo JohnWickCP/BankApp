@@ -1,7 +1,6 @@
 package CHBank.Models;
 
 import javafx.beans.property.*;
-import javafx.stage.Stage;
 
 import java.time.LocalDate;
 

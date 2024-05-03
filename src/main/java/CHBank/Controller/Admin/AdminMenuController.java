@@ -20,10 +20,10 @@ public class AdminMenuController implements Initializable {
         addListener();
     }
     private void addListener(){
-        create_client_button.setOnAction(e -> onCreateClient());
-        clients_list_button.setOnAction(e -> onClients());
-        deposit_button.setOnAction(e -> onDeposit());
-        logout_button.setOnAction(e -> onLogout());
+        create_client_button.setOnAction(_ -> onCreateClient());
+        clients_list_button.setOnAction(_ -> onClients());
+        deposit_button.setOnAction(_ -> onDeposit());
+        logout_button.setOnAction(_ -> onLogout());
     }
     private void onCreateClient(){
         Model.getInstance().getView().getAdminSelectedMenuItem().set(AdminMenuOptions.CREATE_CLIENTS);

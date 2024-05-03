@@ -31,10 +31,10 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindData();
-        initLatestTransactionsLists();;
+        initLatestTransactionsLists();
         transaction_listview.setItems(Model.getInstance().getLatestTransactions());
-        transaction_listview.setCellFactory(e -> new TransactionCellFactory());
-        send_money_but.setOnAction(e -> onSendMoney());
+        transaction_listview.setCellFactory(_ -> new TransactionCellFactory());
+        send_money_but.setOnAction(_ -> onSendMoney());
         accountSummary();
     }
 
@@ -66,11 +66,16 @@ public class DashboardController implements Initializable {
         } catch (Exception e) {
             e.printStackTrace();
         }
+
         // Tru tien cua nguoi chuyen
         Model.getInstance().getDatabaseDriver().updateBalance(sender, amount, "SUB");
+
         // Cap nhat so du cau doi tuong khach hang
+
         Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(sender));
+
         // ghi nhan
+
         Model.getInstance().getDatabaseDriver().newTransactions(sender, receiver, amount, message);
         // Clear fields
         payee_field.clear();

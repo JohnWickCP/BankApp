@@ -33,7 +33,7 @@ public class CreateClientController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        create_client_button.setOnAction(actionEvent -> createClient());
+        create_client_button.setOnAction(_ -> createClient());
         pAddress_box.selectedProperty().addListener((observable, oldValue, newValue) -> {
             if (newValue) {
                 payeeAddress = createPayeeAddress();

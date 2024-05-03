@@ -16,7 +16,7 @@ public class ClientsController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initData();
         clients_listview.setItems(Model.getInstance().getClients());
-        clients_listview.setCellFactory(e -> new ClientCellFactory());
+        clients_listview.setCellFactory(_ -> new ClientCellFactory());
     }
 
     private void initData (){

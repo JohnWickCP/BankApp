@@ -31,7 +31,7 @@ public class DepositController implements Initializable {
         ObservableList<Client> searchResult = Model.getInstance().searchClients(pAddress_field.getText());
         result_listview.setItems(searchResult);
         result_listview.setCellFactory(e -> new ClientCellFactory());
-        client = searchResult.get(0);
+        client = searchResult.getFirst();
     }
     private void onDepositButtonClicked(){
         double amount = Double.parseDouble(Amount_filed.getText());

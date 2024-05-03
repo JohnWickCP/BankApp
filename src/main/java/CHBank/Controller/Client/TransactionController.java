@@ -17,7 +17,7 @@ public class TransactionController implements Initializable {
     public void initialize(URL url, ResourceBundle resourceBundle) {
         initAllTransactions();
         transaction_Listview.setItems(Model.getInstance().getAllTransactions());
-        transaction_Listview.setCellFactory(e -> new TransactionCellFactory());
+        transaction_Listview.setCellFactory(_ -> new TransactionCellFactory());
     }
 
     private void initAllTransactions(){

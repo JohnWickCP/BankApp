@@ -10,7 +10,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.layout.AnchorPane;
-import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.StackPane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Modality;
@@ -91,12 +90,6 @@ public class View {
         return accountsView;
     }
 
-    public void showLoginWindow() {
-        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
-        List<String> stylesheets = new ArrayList<String>();
-        stylesheets.add("/Styles/login.css");
-        createStage(loader,stylesheets);
-    }
 
     /* Admin views section */
     public ObjectProperty<AdminMenuOptions> getAdminSelectedMenuItem(){
@@ -139,12 +132,19 @@ public class View {
         }
         return depositsView;
     }
+    // Class trung gian
+    public void showLoginWindow() {
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
+        List<String> stylesheets = new ArrayList<>();
+        stylesheets.add("/Styles/login.css");
+        createStage(loader,stylesheets);
+    }
 
     public void showClientWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Client/Client.fxml"));
         ClientController clientController = new ClientController();
         loader.setController(clientController);
-        List<String> stylesheets = new ArrayList<String>();
+        List<String> stylesheets = new ArrayList<>();
         stylesheets.add("/Styles/Dashboard.css");
         stylesheets.add("/Styles/ClientMenu.css");
         createStage(loader, stylesheets);
@@ -154,7 +154,7 @@ public class View {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Admin/Admin.fxml"));
         AdminController adminController = new AdminController();
         loader.setController(adminController);
-        List<String> stylesheets = new ArrayList<String>();
+        List<String> stylesheets = new ArrayList<>();
         stylesheets.add("/Styles/CreateClient.css");
         stylesheets.add("/Styles/AdminMenu.css");
         createStage(loader, stylesheets);
