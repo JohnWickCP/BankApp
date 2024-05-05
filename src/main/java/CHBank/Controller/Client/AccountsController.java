@@ -1,5 +1,8 @@
 package CHBank.Controller.Client;
 
+import CHBank.Models.SavingAccount;
+import CHBank.Models.CheckingAccount;
+import CHBank.Models.Model;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -22,9 +25,83 @@ public class AccountsController implements Initializable {
     public Button trans_to_save_button;
     public Button trans_to_cv_button;
     public TextField amount_to_ch;
+    public Label empty_transfer_warning_save;
+    public Label empty_transfer_warning_ch;
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
+        bindData();
+        trans_to_save_button.setOnAction(e -> trans_to_save());
+        trans_to_cv_button.setOnAction(e -> trans_to_check());
+    }
 
+    private void bindData(){
+        ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
+        ch_acc_num.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().accountNumberProperty());
+        transaction_limit.textProperty().bind(((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().asString());
+
+        saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
+        saving_acc_num.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().accountNumberProperty());
+        withdrawal_limit.textProperty().bind(((SavingAccount) Model.getInstance().getClient().SavingAccount().get()).withdrawalLimitProperty().asString());
+    }
+
+    private void trans_to_save() {
+        String pAddress = Model.getInstance().getClient().pAddress().get();
+        String amountText = amount_to_save.getText().trim();
+        if (amountText.isEmpty()) {
+            empty_transfer_warning_save.setVisible(true);
+            return;
+        }
+        empty_transfer_warning_save.setVisible(false);
+
+        double amount = Double.parseDouble(amountText);
+        double checkingBalance = Model.getInstance().getClient().CheckingAccount().get().balanceProperty().get();
+        if (amount > checkingBalance) {
+            empty_transfer_warning_save.setText("Insufficient balance in checking account.");
+            empty_transfer_warning_save.setVisible(true);
+            return;
+        }
+
+
+        Model.getInstance().getDatabaseDriver().updateSavingsBalance(pAddress, amount, "ADD");
+        Model.getInstance().getDatabaseDriver().updateCheckingBalance(pAddress, amount, "SUBTRACT");
+
+        Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(pAddress));
+        Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(pAddress));
+
+        ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
+        saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
+
+        amount_to_save.clear();
+    }
+
+    private void trans_to_check() {
+        String pAddress = Model.getInstance().getClient().pAddress().get();
+        String amountText = amount_to_ch.getText().trim();
+        if (amountText.isEmpty()) {
+            empty_transfer_warning_ch.setVisible(true);
+            return;
+        }
+        empty_transfer_warning_ch.setVisible(false);
+
+        double amount = Double.parseDouble(amountText);
+        double savingsBalance = Model.getInstance().getClient().SavingAccount().get().balanceProperty().get();
+        if (amount > savingsBalance) {
+            empty_transfer_warning_ch.setText("Insufficient balance in savings account.");
+            empty_transfer_warning_ch.setVisible(true);
+            return;
+        }
+
+
+        Model.getInstance().getDatabaseDriver().updateSavingsBalance(pAddress, amount, "SUBTRACT");
+        Model.getInstance().getDatabaseDriver().updateCheckingBalance(pAddress, amount, "ADD");
+
+        Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(pAddress));
+        Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(pAddress));
+
+        ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
+        saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
+
+        amount_to_ch.clear();
     }
 }

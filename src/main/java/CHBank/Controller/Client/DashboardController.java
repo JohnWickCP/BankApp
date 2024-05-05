@@ -53,6 +53,7 @@ public class DashboardController implements Initializable {
         }
     }
 
+
     private void onSendMoney(){
         String  receiver = payee_field.getText();
         double amount = Double.parseDouble(amount_filed.getText());
@@ -61,21 +62,20 @@ public class DashboardController implements Initializable {
         ResultSet resultSet = Model.getInstance().getDatabaseDriver().searchClient(receiver);
         try {
             if (resultSet.isBeforeFirst()){
-                Model.getInstance().getDatabaseDriver().updateBalance(receiver, amount, "ADD");
+                Model.getInstance().getDatabaseDriver().updateSavingsBalance(receiver, amount, "ADD");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
         // Tru tien cua nguoi chuyen
-        Model.getInstance().getDatabaseDriver().updateBalance(sender, amount, "SUB");
+        Model.getInstance().getDatabaseDriver().updateSavingsBalance(sender, amount, "SUB");
 
-        // Cap nhat so du cau doi tuong khach hang
+        // Cap nhat so du cua doi tuong khach hang
 
         Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(sender));
 
         // ghi nhan
-
         Model.getInstance().getDatabaseDriver().newTransactions(sender, receiver, amount, message);
         // Clear fields
         payee_field.clear();

@@ -181,6 +181,7 @@ public class Model {
         }
         return account;
     }
+
     public ObservableList<Client> searchClients(String pAddress){
         ObservableList<Client> searchResults = FXCollections.observableArrayList();
         ResultSet resultSet = databaseDriver.searchClient(pAddress);

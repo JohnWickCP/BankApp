@@ -79,9 +79,44 @@ public class DatabaseDriver {
         return balance;
     }
 
+    public double getCheckingBalance(String pAddress){
+        Statement statement;
+        ResultSet resultSet = null;
+        double balance = 0;
+        try {
+            statement = this.connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM CheckingAccounts WHERE Owner = '"+pAddress+"';");
+            balance= resultSet.getDouble("Balance");
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return balance;
+    }
 
   // Phương thức + or - theo dấu
-    public void updateBalance(String pAddress, double amount, String operation) {
+  public void updateCheckingBalance(String pAddress, double amount, String operation) {
+      Statement statement;
+      ResultSet resultSet;
+      try {
+          statement = this.connection.createStatement();
+          resultSet = statement.executeQuery("SELECT * FROM CheckingAccounts WHERE Owner = '"+pAddress+"';");
+          double newBalance;
+          if (operation.equals("ADD")) {
+              newBalance = resultSet.getDouble("Balance") + amount;
+              statement.executeUpdate("UPDATE CheckingAccounts SET Balance = "+newBalance+" WHERE Owner = '"+pAddress+"';");
+          } else {
+              if (resultSet.getDouble("Balance") >= amount) {
+                  newBalance = resultSet.getDouble("Balance") - amount;
+                  statement.executeUpdate("UPDATE CheckingAccounts SET Balance = "+newBalance+" WHERE Owner = '"+pAddress+"';");
+              }
+          }
+      } catch (SQLException e) {
+          e.printStackTrace();
+      }
+  }
+
+
+    public void updateSavingsBalance(String pAddress, double amount, String operation) {
         Statement statement;
         ResultSet resultSet;
         try {
