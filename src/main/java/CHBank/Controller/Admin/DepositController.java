@@ -45,6 +45,5 @@ public class DepositController implements Initializable {
     private void emptyFields(){
         pAddress_field.setText("");
         Amount_filed.setText("");
-
     }
 }

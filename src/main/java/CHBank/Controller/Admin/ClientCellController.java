@@ -29,7 +29,7 @@ public class ClientCellController implements Initializable {
         pAddress_label.textProperty().bind(client.pAddress());
         ch_acc_label.textProperty().bind(client.CheckingAccount().asString());
         sv_acc_label.textProperty().bind(client.SavingAccount().asString());
-        date_label.setText(Model.getInstance().getClient().DateCreated().get().toString());
+        date_label.textProperty().bind(client.DateCreated().asString());
         delete_button.setOnAction(_ -> setDelete_button());
     }
 

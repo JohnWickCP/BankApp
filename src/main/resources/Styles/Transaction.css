@@ -16,3 +16,10 @@
     -fx-background-color: #EEEEEE;
     -fx-pref-width: 800;
 }
+.transaction_container HBox {
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+.transaction_container HBox Text {
+    -fx-font-size: 1.3em;
+}

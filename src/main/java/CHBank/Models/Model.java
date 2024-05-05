@@ -23,7 +23,7 @@ public class Model {
     // Admin Data section
     private boolean adminLoginSuccessFlag;
     private final ObservableList<Client> clients;
-    private ListChangeListener<Client> clientListChangeListener;
+
 
     private Model(){
         this.databaseDriver = new DatabaseDriver();
@@ -36,8 +36,8 @@ public class Model {
         this.latestTransactions = FXCollections.observableArrayList();
         this.allTransactions = FXCollections.observableArrayList();
 
-
         // Admin Data Section
+
         this.adminLoginSuccessFlag = false;
         this.clients = FXCollections.observableArrayList();
     }
@@ -118,8 +118,26 @@ public class Model {
         return allTransactions;
     }
 
-    // Admin method section
+    public ObservableList<Transaction> searchTransactionsBetweenDates(LocalDate startDate, LocalDate endDate) {
+        ObservableList<Transaction> searchResults = FXCollections.observableArrayList();
+        ResultSet resultSet = databaseDriver.searchTransactionsBetweenDates(startDate, endDate);
+        try {
+            while (resultSet.next()) {
+                String sender = resultSet.getString("Sender");
+                String receiver = resultSet.getString("Receiver");
+                double amount = resultSet.getDouble("Amount");
+                String[] dateParts = resultSet.getString("Date").split("-");
+                LocalDate date = LocalDate.of(Integer.parseInt(dateParts[0]), Integer.parseInt(dateParts[1]), Integer.parseInt(dateParts[2]));
+                String message = resultSet.getString("Message");
+                searchResults.add(new Transaction(sender, receiver, amount, date, message));
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return searchResults;
+    }
 
+    // Admin method section
     public boolean getAdminLoginSuccessFlag() {return adminLoginSuccessFlag;}
     public void setAdminLoginSuccessFlag(boolean flag) {this.adminLoginSuccessFlag = flag;}
 
@@ -152,12 +170,10 @@ public class Model {
                 savingAccount = getSavingsAccount(pAddress);
                 clients.add(new Client(fName, lName, pAddress, checkingAccount, savingAccount, date));
             }
-
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
-
 
     public CheckingAccount getCheckingAccount(String pAddress) {
         CheckingAccount account = null;

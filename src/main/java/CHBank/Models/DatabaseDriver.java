@@ -58,7 +58,6 @@ public class DatabaseDriver {
     }
 
 
-
     public double getSavingsBalance(String pAddress){
         Statement statement;
         ResultSet resultSet = null;
@@ -87,27 +86,27 @@ public class DatabaseDriver {
         return balance;
     }
 
-  // Phương thức + or - theo dấu
-  public void updateCheckingBalance(String pAddress, double amount, String operation) {
-      Statement statement;
-      ResultSet resultSet;
-      try {
-          statement = this.connection.createStatement();
-          resultSet = statement.executeQuery("SELECT * FROM CheckingAccounts WHERE Owner = '"+pAddress+"';");
-          double newBalance;
-          if (operation.equals("ADD")) {
-              newBalance = resultSet.getDouble("Balance") + amount;
-              statement.executeUpdate("UPDATE CheckingAccounts SET Balance = "+newBalance+" WHERE Owner = '"+pAddress+"';");
-          } else {
-              if (resultSet.getDouble("Balance") >= amount) {
-                  newBalance = resultSet.getDouble("Balance") - amount;
-                  statement.executeUpdate("UPDATE CheckingAccounts SET Balance = "+newBalance+" WHERE Owner = '"+pAddress+"';");
-              }
-          }
-      } catch (SQLException e) {
-          e.printStackTrace();
-      }
-  }
+    // Phương thức + or - theo dấu
+    public void updateCheckingBalance(String pAddress, double amount, String operation) {
+        Statement statement;
+        ResultSet resultSet;
+        try {
+            statement = this.connection.createStatement();
+            resultSet = statement.executeQuery("SELECT * FROM CheckingAccounts WHERE Owner = '"+pAddress+"';");
+            double newBalance;
+            if (operation.equals("ADD")) {
+                newBalance = resultSet.getDouble("Balance") + amount;
+                statement.executeUpdate("UPDATE CheckingAccounts SET Balance = "+newBalance+" WHERE Owner = '"+pAddress+"';");
+            } else {
+                if (resultSet.getDouble("Balance") >= amount) {
+                    newBalance = resultSet.getDouble("Balance") - amount;
+                    statement.executeUpdate("UPDATE CheckingAccounts SET Balance = "+newBalance+" WHERE Owner = '"+pAddress+"';");
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
 
     public void updateSavingsBalance(String pAddress, double amount, String operation) {
         Statement statement;
@@ -143,6 +142,20 @@ public class DatabaseDriver {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+    }
+
+    public ResultSet searchTransactionsBetweenDates(LocalDate startDate, LocalDate endDate) {
+        Statement statement;
+        ResultSet resultSet = null;
+        try {
+            statement = this.connection.createStatement();
+            String query = "SELECT * FROM Transactions WHERE Date BETWEEN '" +
+                    startDate.toString() + "' AND '" + endDate.toString() + "'";
+            resultSet = statement.executeQuery(query);
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 
     /* Admin Section */
@@ -208,6 +221,7 @@ public class DatabaseDriver {
     }
 
     public ResultSet getAllClientsData(){
+
         Statement statement;
         ResultSet resultSet = null;
         try {
