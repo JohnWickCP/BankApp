@@ -31,16 +31,29 @@ public class TransactionController implements Initializable {
         export_button.setOnAction(e -> exportTransactions());
     }
 
+    private void initData(){
+        Model.getInstance().setAllTransactions();
+    }
     public void defaultSomething(){
+        initData();
         transaction_Listview.setItems(Model.getInstance().getAllTransactions());
         transaction_Listview.setCellFactory(_ -> new TransactionCellFactory());
     }
 
     // Method to handle search button action
     public void searchTransactions() {
+
+        String fromText = dayFrom_field.getText().trim();
+        String toText = dayTo_field.getText().trim();
+
+        if (fromText.isEmpty() && toText.isEmpty()) {
+            defaultSomething(); // Refresh the page
+            return;
+        }
+
         try {
-            LocalDate dayFrom = LocalDate.parse(dayFrom_field.getText());
-            LocalDate dayTo = LocalDate.parse(dayTo_field.getText());
+            LocalDate dayFrom = LocalDate.parse(fromText);
+            LocalDate dayTo = LocalDate.parse(toText);
 
             if (dayFrom.isAfter(dayTo)) {
                 showAlert(Alert.AlertType.ERROR, "Error", "Start date cannot be after end date.");
