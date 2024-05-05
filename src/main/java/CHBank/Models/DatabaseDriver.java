@@ -50,7 +50,7 @@ public class DatabaseDriver {
         ResultSet resultSet = null;
         try {
             statement = this.connection.createStatement();
-            resultSet = statement.executeQuery("SELECT * FROM Transactions WHERE Sender = '"+pAddress+"' OR Receiver = '"+pAddress+"' LIMIT "+limit+";");
+            resultSet = statement.executeQuery("SELECT * FROM Transactions WHERE Sender = '"+pAddress+"' OR Receiver = '"+pAddress+"' ORDER BY ID DESC LIMIT "+limit+";");
         } catch (SQLException e) {
             e.printStackTrace();
         }
