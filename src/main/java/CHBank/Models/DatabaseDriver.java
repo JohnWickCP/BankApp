@@ -181,7 +181,6 @@ public class DatabaseDriver {
     }
 
 
-
     public void createCheckingAccount(String owner, String number, double tLimit, double balance){
         openConnection();
         try{
@@ -238,6 +237,27 @@ public class DatabaseDriver {
         }
     }
 
+    public void deleteClient(String pAddress) {
+        openConnection();
+        try {
+
+            PreparedStatement deleteClientStatement = connection.prepareStatement("DELETE FROM Clients WHERE PayeeAddress = ?");
+            deleteClientStatement.setString(1, pAddress);
+            deleteClientStatement.executeUpdate();
+
+            PreparedStatement deleteSavingsStatement = connection.prepareStatement("DELETE FROM SavingsAccounts WHERE Owner = ?");
+            deleteSavingsStatement.setString(1, pAddress);
+            deleteSavingsStatement.executeUpdate();
+
+            PreparedStatement deleteCheckingStatement = connection.prepareStatement("DELETE FROM CheckingAccounts WHERE Owner = ?");
+            deleteCheckingStatement.setString(1, pAddress);
+            deleteCheckingStatement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        } finally {
+            closeConnection();
+        }
+    }
 
 
     /* Utility Methods */

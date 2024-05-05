@@ -1,6 +1,7 @@
 package CHBank.Controller.Admin;
 
 import CHBank.Models.Client;
+import CHBank.Models.Model;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
@@ -27,8 +28,15 @@ public class ClientCellController implements Initializable {
         lName_label.textProperty().bind(client.LastName());
         pAddress_label.textProperty().bind(client.pAddress());
         ch_acc_label.textProperty().bind(client.CheckingAccount().asString());
-        sv_acc_label.textProperty().bind(client.CheckingAccount().asString());
+        sv_acc_label.textProperty().bind(client.SavingAccount().asString());
         date_label.textProperty().bind(client.CheckingAccount().asString());
+        delete_button.setOnAction(_ -> setDelete_button());
+    }
+
+    private void setDelete_button(){
+        String pAddress = client.pAddress().get();
+        Model.getInstance().getDatabaseDriver().deleteClient(pAddress);
+
     }
 }
 

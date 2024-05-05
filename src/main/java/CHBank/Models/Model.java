@@ -2,6 +2,7 @@ package CHBank.Models;
 
 import CHBank.Views.View;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 
 import java.sql.ResultSet;
@@ -22,6 +23,7 @@ public class Model {
     // Admin Data section
     private boolean adminLoginSuccessFlag;
     private final ObservableList<Client> clients;
+    private ListChangeListener<Client> clientListChangeListener;
 
     private Model(){
         this.databaseDriver = new DatabaseDriver();
