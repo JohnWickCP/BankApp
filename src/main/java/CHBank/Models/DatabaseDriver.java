@@ -115,7 +115,6 @@ public class DatabaseDriver {
       }
   }
 
-
     public void updateSavingsBalance(String pAddress, double amount, String operation) {
         Statement statement;
         ResultSet resultSet;
@@ -180,6 +179,8 @@ public class DatabaseDriver {
             closeConnection();
         }
     }
+
+
 
     public void createCheckingAccount(String owner, String number, double tLimit, double balance){
         openConnection();

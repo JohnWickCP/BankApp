@@ -39,10 +39,12 @@ public class AccountsController implements Initializable {
         ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
         ch_acc_num.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().accountNumberProperty());
         transaction_limit.textProperty().bind(((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().asString());
+        ch_acc_date.setText(Model.getInstance().getClient().DateCreated().get().toString());
 
         saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
         saving_acc_num.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().accountNumberProperty());
         withdrawal_limit.textProperty().bind(((SavingAccount) Model.getInstance().getClient().SavingAccount().get()).withdrawalLimitProperty().asString());
+        saving_acc_date.setText(Model.getInstance().getClient().DateCreated().get().toString());
     }
 
     private void trans_to_save() {
