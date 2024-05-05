@@ -13,7 +13,6 @@ public class ClientMenuController implements Initializable {
     public Button dashboard_but;
     public Button transaction_but;
     public Button acc_but;
-    public Button profile_but;
     public Button logout_but;
     public Button report_but;
 

@@ -16,12 +16,14 @@ public class ClientCellController implements Initializable {
     public Label ch_acc_label;
     public Label sv_acc_label;
     public Label date_label;
-    public Button delete_button;
+
 
     private final Client client;
+
     public ClientCellController(Client client) {
         this.client = client;
     }
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         fName_label.textProperty().bind(client.FirstName());
@@ -30,12 +32,7 @@ public class ClientCellController implements Initializable {
         ch_acc_label.textProperty().bind(client.CheckingAccount().asString());
         sv_acc_label.textProperty().bind(client.SavingAccount().asString());
         date_label.textProperty().bind(client.DateCreated().asString());
-        delete_button.setOnAction(_ -> setDelete_button());
     }
 
-    private void setDelete_button(){
-        String pAddress = client.pAddress().get();
-        Model.getInstance().getDatabaseDriver().deleteClient(pAddress);
-    }
 }
 
