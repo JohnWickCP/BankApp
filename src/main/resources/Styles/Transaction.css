@@ -23,3 +23,7 @@
 .transaction_container HBox Text {
     -fx-font-size: 1.3em;
 }
+
+.transaction_container HBox Button{
+    -fx-cursor: hand;
+}

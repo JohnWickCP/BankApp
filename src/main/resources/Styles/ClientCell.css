@@ -5,8 +5,9 @@
 }
 
 .client_cell_container HBox {
+    -fx-alignment: center_left;
     -fx-spacing: 10;
-    -fx-alignment: Center_left;
+
 }
 
 .client_cell_container_HBox_L {

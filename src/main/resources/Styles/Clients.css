@@ -17,3 +17,15 @@
     -fx-background-color: #EEEEEE;
     -fx-padding: 10;
 }
+
+.clients_container HBox{
+    -fx-alignment: center;
+    -fx-spacing: 10;
+}
+
+.clients_container HBox Text{
+    -fx-font-size: 1.6em;
+}
+.clients_container HBox Button {
+    -fx-cursor: hand;
+}
