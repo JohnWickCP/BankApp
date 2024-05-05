@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TextField?>
@@ -10,12 +11,18 @@
 <AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="transaction_container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CHBank.Controller.Client.TransactionController">
     <Text layoutX="364.0" layoutY="36.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Transactions" AnchorPane.leftAnchor="364.0" AnchorPane.topAnchor="14.0" />
     <ListView fx:id="transaction_Listview" layoutX="15.2" layoutY="128.8" prefHeight="611.0" prefWidth="830.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="129.0" />
-   <HBox layoutX="58.0" layoutY="72.8" prefHeight="66.0" prefWidth="580.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="73.0">
+   <HBox layoutX="58.0" layoutY="72.8" prefHeight="66.0" prefWidth="817.0" AnchorPane.leftAnchor="15.0" AnchorPane.topAnchor="73.0">
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="from:" />
-      <TextField fx:id="dayFrom_field" />
+      <TextField fx:id="dayFrom_field" prefHeight="30.0" prefWidth="150.0" />
       <Text strokeType="OUTSIDE" strokeWidth="0.0" text="to:" />
-      <TextField fx:id="dayTo_field" />
-      <Button fx:id="search_button" mnemonicParsing="false" prefHeight="30.0" prefWidth="54.0" text="Search" />
-      <Button fx:id="export_button" mnemonicParsing="false" prefHeight="26.0" prefWidth="59.0" text="Export" />
+      <TextField fx:id="dayTo_field" prefHeight="30.0" prefWidth="150.0" />
+      <Button fx:id="search_button" mnemonicParsing="false" prefHeight="30.0" prefWidth="75.0" text="Search">
+         <graphic>
+            <FontAwesomeIcon glyphName="SEARCH" />
+         </graphic></Button>
+      <Button fx:id="export_button" mnemonicParsing="false" prefHeight="26.0" prefWidth="87.0" text="Export">
+         <graphic>
+            <FontAwesomeIcon glyphName="DOWNLOAD" />
+         </graphic></Button>
    </HBox>
 </AnchorPane>
