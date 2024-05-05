@@ -203,12 +203,12 @@ public class Model {
         return account;
     }
 
-    public ObservableList<Client> searchClients(String pAddress){
+    public ObservableList<Client> searchClients(String pAddress) {
         ObservableList<Client> searchResults = FXCollections.observableArrayList();
         ResultSet resultSet = databaseDriver.searchClient(pAddress);
         try {
             if (!resultSet.next()) {
-                return searchResults; // Return an empty list if no data found
+              return searchResults;
             }
             CheckingAccount checkingAccount = getCheckingAccount(pAddress);
             SavingAccount savingAccount = getSavingsAccount(pAddress);
@@ -221,5 +221,17 @@ public class Model {
             e.printStackTrace();
         }
         return searchResults;
+    }
+
+    public ResultSet searchClient(String pAddress) {
+        ResultSet resultSet = databaseDriver.searchClient(pAddress);
+        try {
+            if (!resultSet.next()) {
+                return null;
+            }
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+        return resultSet;
     }
 }

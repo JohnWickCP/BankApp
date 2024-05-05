@@ -53,13 +53,39 @@ public class DashboardController implements Initializable {
         }
     }
 
-
     private void onSendMoney(){
-        String  receiver = payee_field.getText();
-        double amount = Double.parseDouble(amount_filed.getText());
+        String  receiver = payee_field.getText().trim();
+        String amountText = amount_filed.getText().trim();
         String message = message_field.getText();
         String sender = Model.getInstance().getClient().pAddress().get();
-        ResultSet resultSet = Model.getInstance().getDatabaseDriver().searchClient(receiver);
+        double amount = 0;
+        if (receiver.isEmpty()) {
+            showAlert("Please enter the recipient's name.");
+            return;
+        }
+
+        if (amountText.isEmpty()) {
+            showAlert("Please enter the amount to send.");
+            return;
+        }
+
+        try {
+            amount = Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            showAlert("Please enter a valid number for the amount.");
+            return;
+        }
+
+        if (amount <= 0) {
+            showAlert("Please enter an amount greater than zero.");
+            return;
+        }
+
+        ResultSet resultSet = Model.getInstance().searchClient(receiver);
+        if (resultSet == null) {
+            showAlert("No client found with the given address.");
+            return;
+        }
         try {
             if (resultSet.isBeforeFirst()){
                 Model.getInstance().getDatabaseDriver().updateSavingsBalance(receiver, amount, "ADD");
@@ -68,14 +94,10 @@ public class DashboardController implements Initializable {
             e.printStackTrace();
         }
 
-        // Tru tien cua nguoi chuyen
         Model.getInstance().getDatabaseDriver().updateSavingsBalance(sender, amount, "SUB");
-
-        // Cap nhat so du cua doi tuong khach hang
 
         Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(sender));
 
-        // ghi nhan
         Model.getInstance().getDatabaseDriver().newTransactions(sender, receiver, amount, message);
         // Clear fields
         payee_field.clear();
@@ -98,5 +120,13 @@ public class DashboardController implements Initializable {
         }
         income_label.setText("+ $"+ income);
         expense_label.setText("+ $"+ expense);
+    }
+
+    private void showAlert(String content) {
+        Alert alert = new Alert(Alert.AlertType.ERROR);
+        alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
     }
 }
