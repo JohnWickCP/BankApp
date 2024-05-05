@@ -31,9 +31,7 @@ public class DashboardController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindData();
-        initLatestTransactionsLists();
-        transaction_listview.setItems(Model.getInstance().getLatestTransactions());
-        transaction_listview.setCellFactory(_ -> new TransactionCellFactory());
+        updateSomething();
         send_money_but.setOnAction(_ -> onSendMoney());
         accountSummary();
     }
@@ -48,9 +46,13 @@ public class DashboardController implements Initializable {
     }
 
     private void initLatestTransactionsLists(){
-        if (Model.getInstance().getLatestTransactions().isEmpty()){
             Model.getInstance().setLatestTransactions();
-        }
+    }
+
+    private void updateSomething(){
+        initLatestTransactionsLists();
+        transaction_listview.setItems(Model.getInstance().getLatestTransactions());
+        transaction_listview.setCellFactory(_ -> new TransactionCellFactory());
     }
 
     private void onSendMoney(){
@@ -99,6 +101,10 @@ public class DashboardController implements Initializable {
         Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(sender));
 
         Model.getInstance().getDatabaseDriver().newTransactions(sender, receiver, amount, message);
+
+        updateSomething();
+        showAlertReal(Alert.AlertType.INFORMATION, "Transfer Successful", "You have transferred " + amount + " to " + receiver);
+
         // Clear fields
         payee_field.clear();
         amount_filed.clear();
@@ -125,6 +131,14 @@ public class DashboardController implements Initializable {
     private void showAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showAlertReal(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();

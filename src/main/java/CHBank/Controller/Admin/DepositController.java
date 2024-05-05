@@ -71,6 +71,8 @@ public class DepositController implements Initializable {
         double newBalance = amount + client.SavingAccount().get().balanceProperty().get();
         Model.getInstance().getDatabaseDriver().depositSavings(client.pAddress().get(), newBalance);
 
+        showAlertReal(Alert.AlertType.INFORMATION, "Successfully", "Deposited " + amount + " to " + client.pAddress().get());
+
         emptyFields();
     }
 
@@ -83,6 +85,13 @@ public class DepositController implements Initializable {
     private void showAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+    private void showAlertReal(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();

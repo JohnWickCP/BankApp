@@ -62,13 +62,21 @@ public class ClientsController implements Initializable {
         Model.getInstance().getDatabaseDriver().deleteClient(address);
 
         address_field.setText("");
-        showAlert("Client deleted.");
+        showAlertReal(Alert.AlertType.INFORMATION, "Client deleted.", "Client deleted successfully.");
         defaultSomething();
     }
 
     private void showAlert(String content) {
         Alert alert = new Alert(Alert.AlertType.ERROR);
         alert.setTitle("Error");
+        alert.setHeaderText(null);
+        alert.setContentText(content);
+        alert.showAndWait();
+    }
+
+    private void showAlertReal(Alert.AlertType type, String title, String content) {
+        Alert alert = new Alert(type);
+        alert.setTitle(title);
         alert.setHeaderText(null);
         alert.setContentText(content);
         alert.showAndWait();
