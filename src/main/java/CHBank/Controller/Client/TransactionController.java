@@ -26,10 +26,14 @@ public class TransactionController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        transaction_Listview.setItems(Model.getInstance().getAllTransactions());
-        transaction_Listview.setCellFactory(_ -> new TransactionCellFactory());
+        defaultSomething();
         search_button.setOnAction(e -> searchTransactions());
         export_button.setOnAction(e -> exportTransactions());
+    }
+
+    public void defaultSomething(){
+        transaction_Listview.setItems(Model.getInstance().getAllTransactions());
+        transaction_Listview.setCellFactory(_ -> new TransactionCellFactory());
     }
 
     // Method to handle search button action

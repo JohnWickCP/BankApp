@@ -173,7 +173,7 @@ public class DatabaseDriver {
     }
 
     public void creteClient(String firstName, String lastName, String address, String password, LocalDate date) {
-        openConnection();
+
         Statement statement;
         try {
             statement = this.connection.createStatement();
@@ -182,14 +182,12 @@ public class DatabaseDriver {
                     "VALUES ('"+firstName+"', '"+lastName+"', '"+address+"', '"+password+"', '"+date.toString()+"');");
         } catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
     }
 
 
     public void createCheckingAccount(String owner, String number, double tLimit, double balance){
-        openConnection();
+
         try{
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO CheckingAccounts (Owner, AccountNumber, TransactionLimit, Balance) VALUES (?, ?, ?, ?)");
             statement.setString(1, owner);
@@ -199,13 +197,11 @@ public class DatabaseDriver {
             statement.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
     }
 
     public void createSavingsAccount(String owner, String number, double wLimit, double balance){
-        openConnection();
+
         try{
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO SavingsAccounts (Owner, AccountNumber, WithdrawalLimit, Balance) VALUES (?, ?, ?, ?)");
             statement.setString(1, owner);
@@ -215,8 +211,6 @@ public class DatabaseDriver {
             statement.executeUpdate();
         } catch (SQLException e){
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
     }
 
@@ -245,7 +239,6 @@ public class DatabaseDriver {
     }
 
     public void deleteClient(String pAddress) {
-        openConnection();
         try {
 
             PreparedStatement deleteClientStatement = connection.prepareStatement("DELETE FROM Clients WHERE PayeeAddress = ?");
@@ -261,8 +254,6 @@ public class DatabaseDriver {
             deleteCheckingStatement.executeUpdate();
         } catch (SQLException e) {
             e.printStackTrace();
-        } finally {
-            closeConnection();
         }
     }
 

@@ -28,6 +28,7 @@ public class DepositController implements Initializable {
         deposit_button .setOnAction(e -> onDepositButtonClicked());
     }
 
+
     public void onClientSearch(){
         String address = pAddress_field.getText().trim();
 
