@@ -64,7 +64,7 @@ public class CreateClientController implements Initializable {
         }
 
         // Create Client
-         String fName = firstname_filed.getText();
+        String fName = firstname_filed.getText();
         String lName = lastname_file.getText();
         String pass = password_filed.getText();
         Model.getInstance().getDatabaseDriver().creteClient(fName, lName, payeeAddress, pass, LocalDate.now());

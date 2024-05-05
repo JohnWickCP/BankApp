@@ -1,9 +1,7 @@
 package CHBank.Controller.Admin;
 
 import CHBank.Models.Client;
-import CHBank.Models.Model;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 
 import java.net.URL;
