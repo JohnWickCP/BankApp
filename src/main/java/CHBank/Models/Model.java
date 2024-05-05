@@ -207,6 +207,9 @@ public class Model {
         ObservableList<Client> searchResults = FXCollections.observableArrayList();
         ResultSet resultSet = databaseDriver.searchClient(pAddress);
         try {
+            if (!resultSet.next()) {
+                return searchResults; // Return an empty list if no data found
+            }
             CheckingAccount checkingAccount = getCheckingAccount(pAddress);
             SavingAccount savingAccount = getSavingsAccount(pAddress);
             String fName = resultSet.getString("Firstname");
