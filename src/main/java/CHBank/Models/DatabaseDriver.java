@@ -31,12 +31,6 @@ public class DatabaseDriver {
         }
     }
 
-    private void executeStatement(String sql) throws SQLException {
-        openConnection();
-        try (Statement statement = connection.createStatement()) {
-            statement.execute(sql);
-        }
-    }
     /* Client Section */
 
     public ResultSet getClientData(String pAddress, String pPassword) {
@@ -214,7 +208,6 @@ public class DatabaseDriver {
     }
 
     public ResultSet getAllClientsData(){
-
         Statement statement;
         ResultSet resultSet = null;
         try {

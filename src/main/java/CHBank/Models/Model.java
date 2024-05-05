@@ -38,7 +38,6 @@ public class Model {
 
 
         // Admin Data Section
-
         this.adminLoginSuccessFlag = false;
         this.clients = FXCollections.observableArrayList();
     }
@@ -118,7 +117,9 @@ public class Model {
     public ObservableList<Transaction> getAllTransactions(){
         return allTransactions;
     }
+
     // Admin method section
+
     public boolean getAdminLoginSuccessFlag() {return adminLoginSuccessFlag;}
     public void setAdminLoginSuccessFlag(boolean flag) {this.adminLoginSuccessFlag = flag;}
 
@@ -151,10 +152,12 @@ public class Model {
                 savingAccount = getSavingsAccount(pAddress);
                 clients.add(new Client(fName, lName, pAddress, checkingAccount, savingAccount, date));
             }
+
         } catch (Exception e) {
             e.printStackTrace();
         }
     }
+
 
     public CheckingAccount getCheckingAccount(String pAddress) {
         CheckingAccount account = null;

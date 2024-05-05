@@ -29,14 +29,13 @@ public class ClientCellController implements Initializable {
         pAddress_label.textProperty().bind(client.pAddress());
         ch_acc_label.textProperty().bind(client.CheckingAccount().asString());
         sv_acc_label.textProperty().bind(client.SavingAccount().asString());
-        date_label.textProperty().bind(client.CheckingAccount().asString());
+        date_label.setText(Model.getInstance().getClient().DateCreated().get().toString());
         delete_button.setOnAction(_ -> setDelete_button());
     }
 
     private void setDelete_button(){
         String pAddress = client.pAddress().get();
         Model.getInstance().getDatabaseDriver().deleteClient(pAddress);
-
     }
 }
 

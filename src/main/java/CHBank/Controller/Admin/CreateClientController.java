@@ -72,6 +72,7 @@ public class CreateClientController implements Initializable {
         error_label.setText("Client Created Successfully");
         emptyFields();
     }
+
     private void createAccount(String accountType){
         double balance = Double.parseDouble(check_amount_field.getText());
 
@@ -88,6 +89,7 @@ public class CreateClientController implements Initializable {
             Model.getInstance().getDatabaseDriver().createSavingsAccount(payeeAddress, accountNumber, 2000, balance);
         }
     }
+
     private void  onCreatePayeeAddress(){
         if (firstname_filed.getText() != null && lastname_file.getText() != null) {
             pAddress_label.setText(payeeAddress);
