@@ -108,6 +108,7 @@ public class DatabaseDriver {
         }
     }
 
+
     public void updateSavingsBalance(String pAddress, double amount, String operation) {
         Statement statement;
         ResultSet resultSet;
@@ -128,6 +129,7 @@ public class DatabaseDriver {
             e.printStackTrace();
         }
     }
+
 
     // Create and record new trans
     public void newTransactions(String sender, String receiver, double amount, String message) {
@@ -185,7 +187,6 @@ public class DatabaseDriver {
         }
     }
 
-
     public void createCheckingAccount(String owner, String number, double tLimit, double balance){
 
         try{
@@ -201,7 +202,6 @@ public class DatabaseDriver {
     }
 
     public void createSavingsAccount(String owner, String number, double wLimit, double balance){
-
         try{
             PreparedStatement statement = this.connection.prepareStatement("INSERT INTO SavingsAccounts (Owner, AccountNumber, WithdrawalLimit, Balance) VALUES (?, ?, ?, ?)");
             statement.setString(1, owner);
@@ -309,4 +309,57 @@ public class DatabaseDriver {
         }
         return resultSet;
     }
+
+    public int getTransactionLimit(String pAddress) {
+        int tLimit = 0;
+        try {
+            PreparedStatement statement = this.connection.prepareStatement("SELECT TransactionLimit FROM CheckingAccounts WHERE Owner = ?");
+            statement.setString(1, pAddress);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                tLimit = resultSet.getInt("TransactionLimit");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return tLimit;
+    }
+
+    public double getWithdrawalLimit(String pAddress) {
+        double withdrawalLimit = 0;
+        try {
+            PreparedStatement statement = this.connection.prepareStatement("SELECT WithdrawalLimit FROM SavingsAccounts WHERE Owner = ?");
+            statement.setString(1, pAddress);
+            ResultSet resultSet = statement.executeQuery();
+            if (resultSet.next()) {
+                withdrawalLimit = resultSet.getDouble("WithdrawalLimit");
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return withdrawalLimit;
+    }
+
+    public void updateTransactionLimit(String pAddress, int newLimit) {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement("UPDATE CheckingAccounts SET TransactionLimit = ? WHERE Owner = ?");
+            statement.setInt(1, newLimit);
+            statement.setString(2, pAddress);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
+    public void updateWithdrawalLimit(String pAddress, double newLimit) {
+        try {
+            PreparedStatement statement = this.connection.prepareStatement("UPDATE SavingsAccounts SET WithdrawalLimit = ? WHERE Owner = ?");
+            statement.setDouble(1, newLimit);
+            statement.setString(2, pAddress);
+            statement.executeUpdate();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

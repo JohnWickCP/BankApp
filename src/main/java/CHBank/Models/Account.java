@@ -21,4 +21,5 @@ public abstract class Account {
     public DoubleProperty balanceProperty() {return balance;}
 
     public void setBalance(Double balance) {this.balance.set(balance);}
+
 }

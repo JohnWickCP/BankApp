@@ -38,6 +38,7 @@ public class TransactionController implements Initializable {
         initData();
         transaction_Listview.setItems(Model.getInstance().getAllTransactions());
         transaction_Listview.setCellFactory(_ -> new TransactionCellFactory());
+
     }
 
     // Method to handle search button action

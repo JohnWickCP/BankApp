@@ -28,6 +28,7 @@ public class AccountsController implements Initializable {
     public Label empty_transfer_warning_save;
     public Label empty_transfer_warning_ch;
 
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindData();
@@ -63,7 +64,16 @@ public class AccountsController implements Initializable {
             empty_transfer_warning_save.setVisible(true);
             return;
         }
-
+        int tLim = Model.getInstance().getDatabaseDriver().getTransactionLimit(pAddress);
+        if (tLim <= 0) {
+            empty_transfer_warning_save.setText("Transaction limit exceeded.");
+            empty_transfer_warning_save.setVisible(true);
+            return;
+        } else {
+            tLim -=1;
+            Model.getInstance().getDatabaseDriver().updateTransactionLimit(pAddress, tLim);
+            ((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().set(tLim);
+        }
 
         Model.getInstance().getDatabaseDriver().updateSavingsBalance(pAddress, amount, "ADD");
         Model.getInstance().getDatabaseDriver().updateCheckingBalance(pAddress, amount, "SUBTRACT");
@@ -71,8 +81,6 @@ public class AccountsController implements Initializable {
         Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(pAddress));
         Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(pAddress));
 
-        ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
-        saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
 
         amount_to_save.clear();
     }
@@ -94,6 +102,16 @@ public class AccountsController implements Initializable {
             return;
         }
 
+        double wLim = Model.getInstance().getDatabaseDriver().getWithdrawalLimit(pAddress);
+        if (wLim <= amount) {
+            empty_transfer_warning_ch.setText("Withdrawal limit exceeded.");
+            empty_transfer_warning_ch.setVisible(true);
+            return;
+        } else {
+            wLim -= amount;
+            Model.getInstance().getDatabaseDriver().updateWithdrawalLimit(pAddress, wLim);
+            ((SavingAccount) Model.getInstance().getClient().CheckingAccount().get()).withdrawalLimitProperty().set(wLim);
+        }
 
         Model.getInstance().getDatabaseDriver().updateSavingsBalance(pAddress, amount, "SUBTRACT");
         Model.getInstance().getDatabaseDriver().updateCheckingBalance(pAddress, amount, "ADD");
@@ -101,9 +119,7 @@ public class AccountsController implements Initializable {
         Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(pAddress));
         Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(pAddress));
 
-        ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
-        saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
-
         amount_to_ch.clear();
     }
+
 }

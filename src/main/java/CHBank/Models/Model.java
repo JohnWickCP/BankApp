@@ -233,4 +233,9 @@ public class Model {
         }
         return resultSet;
     }
+
+    public void refreshLimitations(String pAddress) {
+        databaseDriver.updateTransactionLimit(pAddress, 10);
+        databaseDriver.updateWithdrawalLimit(pAddress, 2000);
+    }
 }

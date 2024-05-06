@@ -1,5 +1,6 @@
 package CHBank.Controller.Client;
 
+import CHBank.Models.CheckingAccount;
 import CHBank.Models.Model;
 import CHBank.Models.Transaction;
 import CHBank.Views.TransactionCellFactory;
@@ -71,6 +72,11 @@ public class DashboardController implements Initializable {
             return;
         }
 
+        if(sender.equals(receiver)){
+            showAlert("U can not transfer to yourself");
+            return;
+        }
+
         try {
             amount = Double.parseDouble(amountText);
         } catch (NumberFormatException e) {
@@ -83,6 +89,9 @@ public class DashboardController implements Initializable {
             return;
         }
 
+        int tLim = Model.getInstance().getDatabaseDriver().getTransactionLimit(sender);
+
+
         ResultSet resultSet = Model.getInstance().searchClient(receiver);
         if (resultSet == null) {
             showAlert("No client found with the given address.");
@@ -90,15 +99,24 @@ public class DashboardController implements Initializable {
         }
         try {
             if (resultSet.isBeforeFirst()){
-                Model.getInstance().getDatabaseDriver().updateSavingsBalance(receiver, amount, "ADD");
+                Model.getInstance().getDatabaseDriver().updateCheckingBalance(receiver, amount, "ADD");
             }
         } catch (Exception e) {
             e.printStackTrace();
         }
 
-        Model.getInstance().getDatabaseDriver().updateSavingsBalance(sender, amount, "SUB");
+        if (tLim <= 0) {
+            showAlert("Transaction limit exceeded");
+            return;
+        } else {
+            tLim -=1;
+            Model.getInstance().getDatabaseDriver().updateTransactionLimit(sender, tLim);
+            ((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().set(tLim);
+        }
 
-        Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(sender));
+        Model.getInstance().getDatabaseDriver().updateCheckingBalance(sender, amount, "SUB");
+
+        Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(sender));
 
         Model.getInstance().getDatabaseDriver().newTransactions(sender, receiver, amount, message);
 

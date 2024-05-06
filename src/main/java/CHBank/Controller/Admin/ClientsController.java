@@ -18,6 +18,7 @@ public class ClientsController implements Initializable {
     public TextField address_field;
     public Button search_button;
     public Button Delete_button;
+    public Button refresh_button;
 
     private Client client;
 
@@ -26,6 +27,7 @@ public class ClientsController implements Initializable {
         defaultSomething();
         search_button.setOnAction(_ -> onSearchButtonClicked());
         Delete_button.setOnAction(_ -> onDeleteButtonClicked());
+        refresh_button.setOnAction(_ -> onRefreshButtonClicked());
     }
     private void initData (){
         Model.getInstance().setClients();
@@ -64,6 +66,11 @@ public class ClientsController implements Initializable {
         address_field.setText("");
         showAlertReal(Alert.AlertType.INFORMATION, "Client deleted.", "Client deleted successfully.");
         defaultSomething();
+    }
+
+    public void onRefreshButtonClicked() {
+        String address = client.pAddress().get();
+        Model.getInstance().refreshLimitations(address);
     }
 
     private void showAlert(String content) {

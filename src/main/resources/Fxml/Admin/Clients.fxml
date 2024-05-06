@@ -10,7 +10,7 @@
 
 <AnchorPane prefHeight="750.0" prefWidth="850.0" styleClass="clients_container" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="CHBank.Controller.Admin.ClientsController">
     <Text layoutX="79.0" layoutY="77.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Clients" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="14.0" />
-    <ListView fx:id="clients_listview" layoutX="50.0" layoutY="132.0" prefHeight="570.0" prefWidth="800.0" AnchorPane.leftAnchor="14.0" AnchorPane.topAnchor="132.0" />
+    <ListView fx:id="clients_listview" layoutX="11.0" layoutY="134.0" prefHeight="570.0" prefWidth="800.0" AnchorPane.leftAnchor="11.0" AnchorPane.topAnchor="134.0" />
     <HBox layoutX="11.0" layoutY="65.0" prefHeight="34.0" prefWidth="816.0">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Payee Address:" />
         <TextField fx:id="address_field" prefHeight="25.0" prefWidth="166.0" />
@@ -18,6 +18,11 @@
          <graphic>
             <FontAwesomeIcon glyphName="SEARCH" size="1.2em" text="" />
          </graphic></Button>
+      <Button fx:id="refresh_button" mnemonicParsing="false" prefHeight="34.0" prefWidth="161.0" text="Refresh All Limitations">
+         <graphic>
+            <FontAwesomeIcon glyphName="CIRCLE_ALT_NOTCH" />
+         </graphic>
+      </Button>
         <Button fx:id="Delete_button" mnemonicParsing="false" prefHeight="29.0" prefWidth="68.0" style="-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF; -fx-font-weight: bold;" text="Delete">
          <graphic>
             <FontAwesomeIcon fill="#fffdfd" glyphName="TIMES" size="1.2em" text="" />
