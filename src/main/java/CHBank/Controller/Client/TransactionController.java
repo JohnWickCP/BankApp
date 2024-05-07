@@ -27,8 +27,8 @@ public class TransactionController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         defaultSomething();
-        search_button.setOnAction(e -> searchTransactions());
-        export_button.setOnAction(e -> exportTransactions());
+        search_button.setOnAction(_ -> searchTransactions());
+        export_button.setOnAction(_ -> exportTransactions());
     }
 
     private void initData(){

@@ -100,7 +100,7 @@ public class View {
         if (createClientsView == null) {
             try {
                 createClientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/CreateClient.fxml")).load();
-                clientsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/CreateClient.css")).toExternalForm());
+                createClientsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/CreateClient.css")).toExternalForm());
             }
             catch (Exception e){
                 e.printStackTrace();

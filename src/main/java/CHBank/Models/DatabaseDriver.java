@@ -3,7 +3,7 @@ package CHBank.Models;
 import java.sql.*;
 import java.time.LocalDate;
 
-public class DatabaseDriver {
+public class  DatabaseDriver {
     private static final String DATABASE_URL = "jdbc:sqlite:bank.db";
     private Connection connection;
 

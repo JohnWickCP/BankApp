@@ -1,10 +1,11 @@
-module com.example.bankapp {
+module com.example.CHBank {
     requires javafx.controls;
     requires javafx.fxml;
     requires fontawesomefx;
     requires com.dlsc.formsfx;
     requires java.sql;
     requires sqlite.jdbc;
+    requires javafx.base;
 
 
     opens CHBank to javafx.fxml;
