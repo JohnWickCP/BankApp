@@ -14,11 +14,11 @@ public class ClientController implements Initializable {
     public BorderPane client_parent;
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        Model.getInstance().getView().getClientSelectedMenuItem().addListener((observable, oldValue, newValue) -> {
+        Model.getInstance().getView().getClientSelectedOptions().addListener((_, _, newValue) -> {
             switch (newValue) {
-                case TRANSACTION -> client_parent.setCenter(Model.getInstance().getView().getTransactionsView());
-                case ACCOUNTS-> client_parent.setCenter(Model.getInstance().getView().getAccountsView());
-                default -> client_parent.setCenter(Model.getInstance().getView().getDashboardView());
+                case TRANSACTION -> client_parent.setCenter(Model.getInstance().getView().getTransactionPane());
+                case ACCOUNTS-> client_parent.setCenter(Model.getInstance().getView().getAccountPane());
+                default -> client_parent.setCenter(Model.getInstance().getView().getDashboardPane());
             }
         });
     }

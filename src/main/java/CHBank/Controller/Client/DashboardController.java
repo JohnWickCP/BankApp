@@ -1,17 +1,21 @@
 package CHBank.Controller.Client;
 
-import CHBank.Models.CheckingAccount;
 import CHBank.Models.Model;
 import CHBank.Models.Transaction;
+import CHBank.Views.AlertMessage;
 import CHBank.Views.TransactionCellFactory;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.beans.binding.Bindings;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
 import javafx.scene.text.Text;
+import javafx.util.Duration;
 
 import java.net.URL;
 import java.sql.ResultSet;
-import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class DashboardController implements Initializable {
@@ -29,30 +33,41 @@ public class DashboardController implements Initializable {
     public Label saving_acc_num;
     public Button send_money_but;
 
+    Model model = Model.getInstance();
+    AlertMessage alertMessage = model.getView().getAlertMessage();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindData();
-        updateSomething();
+        updateData();
         send_money_but.setOnAction(_ -> onSendMoney());
         accountSummary();
     }
 
+    private void updateTime() {
+        Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), _ -> {
+           String currentTime = "Today, " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+        }));
+        timeline.setCycleCount(Timeline.INDEFINITE);
+        timeline.play();
+    }
+
     private void bindData(){
-        user_name.textProperty().bind(Bindings.concat("Hi, ").concat(Model.getInstance().getClient().FirstName()));
-        login_date.setText("Today, " + LocalDate.now());
-        checking_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
-        checking_acc_num.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().accountNumberProperty());
-        savings_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
-        saving_acc_num.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().accountNumberProperty());
+        user_name.textProperty().bind(Bindings.concat("Hi, ").concat(model.getClient().fNameProperty()));
+        updateTime();
+        checking_bal.textProperty().bind(model.getClient().checkingAccountProperty().get().balanceProperty().asString());
+        checking_acc_num.textProperty().bind(model.getClient().checkingAccountProperty().get().accountNumberProperty());
+        savings_bal.textProperty().bind(model.getClient().savingsAccountProperty().get().balanceProperty().asString());
+        saving_acc_num.textProperty().bind(model.getClient().savingsAccountProperty().get().accountNumberProperty());
     }
 
     private void initLatestTransactionsLists(){
-            Model.getInstance().setLatestTransactions();
+            model.setLatestTransactions();
     }
 
-    private void updateSomething(){
+    private void updateData(){
         initLatestTransactionsLists();
-        transaction_listview.setItems(Model.getInstance().getLatestTransactions());
+        transaction_listview.setItems(model.getLatestTransactions());
         transaction_listview.setCellFactory(_ -> new TransactionCellFactory());
     }
 
@@ -60,32 +75,34 @@ public class DashboardController implements Initializable {
         String  receiver = payee_field.getText().trim();
         String amountText = amount_filed.getText().trim();
         String message = message_field.getText();
-        String sender = Model.getInstance().getClient().pAddress().get();
-        double amount = 0;
+        String sender = Model.getInstance().getClient().pAddressProperty().get();
+
+        double amount ;
+
         if (receiver.isEmpty()) {
-            showAlert("Please enter the recipient's name.");
+            alertMessage.errorMessage("Please enter the recipient's name.");
             return;
         }
 
         if (amountText.isEmpty()) {
-            showAlert("Please enter the amount to send.");
+            alertMessage.errorMessage("Please enter the amount to send.");
             return;
         }
 
         if(sender.equals(receiver)){
-            showAlert("U can not transfer to yourself");
+            alertMessage.errorMessage("You can not transfer to yourself");
             return;
         }
 
         try {
             amount = Double.parseDouble(amountText);
         } catch (NumberFormatException e) {
-            showAlert("Please enter a valid number for the amount.");
+            alertMessage.errorMessage("Please enter a valid number for the amount.");
             return;
         }
 
         if (amount <= 0) {
-            showAlert("Please enter an amount greater than zero.");
+            alertMessage.errorMessage("Please enter an amount greater than zero.");
             return;
         }
 
@@ -94,7 +111,7 @@ public class DashboardController implements Initializable {
 
         ResultSet resultSet = Model.getInstance().searchClient(receiver);
         if (resultSet == null) {
-            showAlert("No client found with the given address.");
+            alertMessage.errorMessage("No client found with the given address.");
             return;
         }
         try {
@@ -106,22 +123,20 @@ public class DashboardController implements Initializable {
         }
 
         if (tLim <= 0) {
-            showAlert("Transaction limit exceeded");
+            alertMessage.errorMessage("Transaction limit exceeded");
             return;
         } else {
             tLim -=1;
-            Model.getInstance().getDatabaseDriver().updateTransactionLimit(sender, tLim);
-            ((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().set(tLim);
+            model.getDatabaseDriver().updateTransactionLimit(sender, tLim);
+            (model.getClient().checkingAccountProperty().get()).transactionLimitProperty().set(tLim);
         }
 
-        Model.getInstance().getDatabaseDriver().updateCheckingBalance(sender, amount, "SUB");
 
-        Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(sender));
-
-        Model.getInstance().getDatabaseDriver().newTransactions(sender, receiver, amount, message);
-
-        updateSomething();
-        showAlertReal(Alert.AlertType.INFORMATION, "Transfer Successful", "You have transferred " + amount + " to " + receiver);
+        model.getDatabaseDriver().updateCheckingBalance(sender, amount, "SUB");
+        model.getClient().checkingAccountProperty().get().setBalance(model.getDatabaseDriver().getCheckingBalance(sender));
+        model.getDatabaseDriver().newTransaction(sender, receiver, amount, message);
+        updateData();
+        alertMessage.successMessage("Transfer Successful " + "You have transferred " + amount + " to " + receiver);
 
         // Clear fields
         payee_field.clear();
@@ -132,11 +147,11 @@ public class DashboardController implements Initializable {
     private void accountSummary(){
         double income = 0;
         double expense = 0;
-        if (Model.getInstance().getAllTransactions().isEmpty()){
-            Model.getInstance().setAllTransactions();
+        if (model.getAllTransactions().isEmpty()){
+            model.setAllTransactions();
         }
-        for (Transaction transaction : Model.getInstance().getAllTransactions()){
-            if (transaction.senderProperty().get().equals(Model.getInstance().getClient().pAddress().get())){
+        for (Transaction transaction : model.getAllTransactions()){
+            if (transaction.senderProperty().get().equals(model.getClient().pAddressProperty().get())){
                 expense = expense + transaction.amountProperty().get();
             } else {
                 income = income + transaction.amountProperty().get();
@@ -146,19 +161,4 @@ public class DashboardController implements Initializable {
         expense_label.setText("+ $"+ expense);
     }
 
-    private void showAlert(String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-
-    private void showAlertReal(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 }

@@ -1,7 +1,5 @@
 package CHBank.Controller.Admin;
 
-import java.text.Normalizer;
-import java.util.regex.Pattern;
 import CHBank.Models.Model;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -10,9 +8,11 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 
 import java.net.URL;
+import java.text.Normalizer;
 import java.time.LocalDate;
 import java.util.Random;
 import java.util.ResourceBundle;
+import java.util.regex.Pattern;
 
 public class CreateClientController implements Initializable {
     public TextField firstname_filed;
@@ -33,61 +33,40 @@ public class CreateClientController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        create_client_button.setOnAction(_ -> createClient());
-        pAddress_box.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        create_client_button.setOnAction(_ -> onCreateClient());
+        pAddress_box.selectedProperty().addListener((_, _, newValue) -> {
             if (newValue) {
                 payeeAddress = createPayeeAddress();
                 onCreatePayeeAddress();
             }
         });
-        check_acc_box.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        check_acc_box.selectedProperty().addListener((_, _, newValue) -> {
             if (newValue) {
                 createCheckingAccountFlag = true;
             }
         });
-        save_acc_box.selectedProperty().addListener((observable, oldValue, newValue) -> {
+        save_acc_box.selectedProperty().addListener((_, _, newValue) -> {
             if (newValue) {
                 createSavingsAccountFlag = true;
             }
         });
     }
 
-    private void createClient() {
-        // Create Checking Account
+    private void onCreateClient(){
         if (createCheckingAccountFlag) {
             createAccount("Checking");
         }
 
-        // Create Savings Account
         if (createSavingsAccountFlag) {
             createAccount("Savings");
         }
 
-        // Create Client
         String fName = firstname_filed.getText();
         String lName = lastname_file.getText();
         String pass = password_filed.getText();
-        Model.getInstance().getDatabaseDriver().creteClient(fName, lName, payeeAddress, pass, LocalDate.now());
-        error_label.setStyle("-fx-text-fill: blue; -fx-font-size: 1.3em; -fx-font-weight: bold;");
-        error_label.setText("Client Created Successfully");
+        Model.getInstance().getDatabaseDriver().createClient(fName, lName, payeeAddress, pass, LocalDate.now());
+        Model.getInstance().getView().getAlertMessage().successMessage("Client created successfully");
         emptyFields();
-    }
-
-    private void createAccount(String accountType){
-        double balance = Double.parseDouble(check_amount_field.getText());
-
-        // Generate Account Number
-        String firstSection = "3210";
-        String lastSection = Integer.toString((new Random()).nextInt(9999) + 1000);
-        String accountNumber = firstSection + " " + lastSection;
-
-        // Create the checking or saving account
-
-        if(accountType.equals("Checking")){
-            Model.getInstance().getDatabaseDriver().createCheckingAccount(payeeAddress, accountNumber, 10, balance);
-        } else {
-            Model.getInstance().getDatabaseDriver().createSavingsAccount(payeeAddress, accountNumber, 2000, balance);
-        }
     }
 
     private void  onCreatePayeeAddress(){
@@ -96,12 +75,28 @@ public class CreateClientController implements Initializable {
         }
     }
 
+    private void createAccount(String accountType){
+        double balance = Double.parseDouble(check_amount_field.getText());
+
+        // Generate Account Number // Uncompleted
+        String firstSection = "3210";
+        String lastSection = Integer.toString((new Random()).nextInt(9999) + 1000);
+        String accountNumber = firstSection + " " + lastSection;
+
+        if(accountType.equals("Checking")){
+            Model.getInstance().getDatabaseDriver().createCheckingAccount(payeeAddress, accountNumber, 10, balance);
+        } else {
+            Model.getInstance().getDatabaseDriver().createSavingsAccount(payeeAddress, accountNumber, 2000, balance);
+        }
+
+    }
+
     private String createPayeeAddress() {
         int id = Model.getInstance().getDatabaseDriver().getLastClientId() + 1;
         String firstName = firstname_filed.getText().trim();
         String lastName = lastname_file.getText().trim();
 
-        // Loại bỏ các dấu từ các tên
+
         firstName = removeAccents(firstName);
         lastName = removeAccents(lastName);
 
@@ -109,7 +104,6 @@ public class CreateClientController implements Initializable {
         String address = "@" + firstChar + lastName + id;
         return address.replaceAll("\\s+", "");
     }
-
     private void emptyFields(){
         firstname_filed.clear();
         lastname_file.clear();
@@ -121,7 +115,6 @@ public class CreateClientController implements Initializable {
         save_amount_filed.clear();
     }
 
-    // Phương thức để loại bỏ các dấu từ các chuỗi
     private String removeAccents(String input) {
         String normalized = Normalizer.normalize(input, Normalizer.Form.NFD);
         Pattern pattern = Pattern.compile("\\p{InCombiningDiacriticalMarks}+");

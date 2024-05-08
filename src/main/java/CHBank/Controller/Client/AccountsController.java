@@ -1,9 +1,9 @@
 package CHBank.Controller.Client;
 
-import CHBank.Models.SavingAccount;
-import CHBank.Models.CheckingAccount;
 import CHBank.Models.Model;
+import CHBank.Views.AlertMessage;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
@@ -12,7 +12,6 @@ import java.net.URL;
 import java.util.ResourceBundle;
 
 public class AccountsController implements Initializable {
-
     public Label ch_acc_num;
     public Label transaction_limit;
     public Label ch_acc_date;
@@ -25,101 +24,112 @@ public class AccountsController implements Initializable {
     public Button trans_to_save_button;
     public Button trans_to_cv_button;
     public TextField amount_to_ch;
-    public Label empty_transfer_warning_save;
-    public Label empty_transfer_warning_ch;
 
-
+    Model mInstance = Model.getInstance();
+    AlertMessage alertMessage = mInstance.getView().getAlertMessage();
+    String pAddress = mInstance.getClient().pAddressProperty().get();
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         bindData();
-        trans_to_save_button.setOnAction(e -> trans_to_save());
-        trans_to_cv_button.setOnAction(e -> trans_to_check());
+        trans_to_save_button.setOnAction(_ -> setTrans_to_save_button());
+        trans_to_cv_button.setOnAction(_ -> setTrans_to_cv_button());
     }
 
     private void bindData(){
-        ch_acc_bal.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().balanceProperty().asString());
-        ch_acc_num.textProperty().bind(Model.getInstance().getClient().CheckingAccount().get().accountNumberProperty());
-        transaction_limit.textProperty().bind(((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().asString());
-        ch_acc_date.setText(Model.getInstance().getClient().DateCreated().get().toString());
+        ch_acc_bal.textProperty().bind(mInstance.getClient().checkingAccountProperty().get().balanceProperty().asString());
+        ch_acc_num.textProperty().bind(mInstance.getClient().checkingAccountProperty().get().accountNumberProperty());
+        transaction_limit.textProperty().bind(mInstance.getClient().checkingAccountProperty().get().transactionLimitProperty().asString());
 
-        saving_acc_bal.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().balanceProperty().asString());
-        saving_acc_num.textProperty().bind(Model.getInstance().getClient().SavingAccount().get().accountNumberProperty());
-        withdrawal_limit.textProperty().bind(((SavingAccount) Model.getInstance().getClient().SavingAccount().get()).withdrawalLimitProperty().asString());
-        saving_acc_date.setText(Model.getInstance().getClient().DateCreated().get().toString());
+        String dateCre = mInstance.getClient().dateCreatedProperty().get().toString();
+        ch_acc_date.setText(dateCre);
+
+        saving_acc_bal.textProperty().bind(mInstance.getClient().savingsAccountProperty().get().balanceProperty().asString());
+        saving_acc_num.textProperty().bind(mInstance.getClient().savingsAccountProperty().get().accountNumberProperty());
+        withdrawal_limit.textProperty().bind(mInstance.getClient().savingsAccountProperty().get().withdrawalLimitProperty().asString());
+
+        saving_acc_date.setText(dateCre);
     }
 
-    private void trans_to_save() {
-        String pAddress = Model.getInstance().getClient().pAddress().get();
+    private void setTrans_to_save_button(){
         String amountText = amount_to_save.getText().trim();
-        if (amountText.isEmpty()) {
-            empty_transfer_warning_save.setVisible(true);
+        double amount;
+        if(amountText.isEmpty()){
+            alertMessage.errorMessage("Amount cannot be empty");
             return;
         }
-        empty_transfer_warning_save.setVisible(false);
 
-        double amount = Double.parseDouble(amountText);
-        double checkingBalance = Model.getInstance().getClient().CheckingAccount().get().balanceProperty().get();
-        if (amount > checkingBalance) {
-            empty_transfer_warning_save.setText("Insufficient balance in checking account.");
-            empty_transfer_warning_save.setVisible(true);
+        try {
+            amount = Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            alertMessage.errorMessage("Invalid amount format");
             return;
         }
-        int tLim = Model.getInstance().getDatabaseDriver().getTransactionLimit(pAddress);
-        if (tLim <= 0) {
-            empty_transfer_warning_save.setText("Transaction limit exceeded.");
-            empty_transfer_warning_save.setVisible(true);
+        double checkingBalance = mInstance.getClient().checkingAccountProperty().get().balanceProperty().get();
+
+        if (amount > checkingBalance){
+            alertMessage.errorMessage("Insufficient balance in checking account");
+            return;
+        }
+
+        int tLim = mInstance.getClient().checkingAccountProperty().get().transactionLimitProperty().get();
+
+        if (tLim <=0){
+            alertMessage.errorMessage("Transaction limit exceeded.");
             return;
         } else {
-            tLim -=1;
-            Model.getInstance().getDatabaseDriver().updateTransactionLimit(pAddress, tLim);
-            ((CheckingAccount) Model.getInstance().getClient().CheckingAccount().get()).transactionLimitProperty().set(tLim);
+            tLim -= 1;
+            mInstance.getDatabaseDriver().updateTransactionLimit(pAddress, tLim);
+            mInstance.getClient().checkingAccountProperty().get().transactionLimitProperty().set(tLim);
         }
 
-        Model.getInstance().getDatabaseDriver().updateSavingsBalance(pAddress, amount, "ADD");
-        Model.getInstance().getDatabaseDriver().updateCheckingBalance(pAddress, amount, "SUBTRACT");
-
-        Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(pAddress));
-        Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(pAddress));
-
+        mInstance.getDatabaseDriver().updateSavingsBalance(pAddress, amount, "ADD");
+        mInstance.getDatabaseDriver().updateCheckingBalance(pAddress, amount, "SUBTRACT");
+        alertMessage.successMessage("Transfer Successfully");
+        mInstance.getClient().savingsAccountProperty().get().setBalance(mInstance.getDatabaseDriver().getSavingsBalance(pAddress));
+        mInstance.getClient().checkingAccountProperty().get().setBalance(mInstance.getDatabaseDriver().getCheckingBalance(pAddress));
 
         amount_to_save.clear();
     }
 
-    private void trans_to_check() {
-        String pAddress = Model.getInstance().getClient().pAddress().get();
+    private void setTrans_to_cv_button(){
         String amountText = amount_to_ch.getText().trim();
-        if (amountText.isEmpty()) {
-            empty_transfer_warning_ch.setVisible(true);
-            return;
-        }
-        empty_transfer_warning_ch.setVisible(false);
+        double amount;
 
-        double amount = Double.parseDouble(amountText);
-        double savingsBalance = Model.getInstance().getClient().SavingAccount().get().balanceProperty().get();
-        if (amount > savingsBalance) {
-            empty_transfer_warning_ch.setText("Insufficient balance in savings account.");
-            empty_transfer_warning_ch.setVisible(true);
+        if(amountText.isEmpty()){
+            alertMessage.errorMessage("Amount cannot be empty");
             return;
         }
 
-        double wLim = Model.getInstance().getDatabaseDriver().getWithdrawalLimit(pAddress);
-        if (wLim <= amount) {
-            empty_transfer_warning_ch.setText("Withdrawal limit exceeded.");
-            empty_transfer_warning_ch.setVisible(true);
+        try {
+            amount = Double.parseDouble(amountText);
+        } catch (NumberFormatException e) {
+            alertMessage.errorMessage("Invalid amount format");
+            return;
+        }
+
+        double savingsBalance = mInstance.getClient().savingsAccountProperty().get().balanceProperty().get();
+        if (amount > savingsBalance){
+            alertMessage.errorMessage("Insufficient balance in savings account");
+            return;
+        }
+
+        double wLim = mInstance.getClient().savingsAccountProperty().get().withdrawalLimitProperty().get();
+        if (wLim >= savingsBalance){
+            alertMessage.errorMessage("withdrawal limit exceeded");
             return;
         } else {
             wLim -= amount;
-            Model.getInstance().getDatabaseDriver().updateWithdrawalLimit(pAddress, wLim);
-            ((SavingAccount) Model.getInstance().getClient().CheckingAccount().get()).withdrawalLimitProperty().set(wLim);
+            mInstance.getDatabaseDriver().updateWithdrawalLimit(pAddress, wLim);
+            mInstance.getClient().savingsAccountProperty().get().withdrawalLimitProperty().set(wLim);
         }
 
-        Model.getInstance().getDatabaseDriver().updateSavingsBalance(pAddress, amount, "SUBTRACT");
-        Model.getInstance().getDatabaseDriver().updateCheckingBalance(pAddress, amount, "ADD");
+        mInstance.getDatabaseDriver().updateCheckingBalance(pAddress, amount, "ADD");
+        mInstance.getDatabaseDriver().updateSavingsBalance(pAddress, amount, "SUBTRACT");
+        alertMessage.successMessage("Transfer Successfully");
 
-        Model.getInstance().getClient().SavingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getSavingsBalance(pAddress));
-        Model.getInstance().getClient().CheckingAccount().get().setBalance(Model.getInstance().getDatabaseDriver().getCheckingBalance(pAddress));
+        mInstance.getClient().savingsAccountProperty().get().setBalance(mInstance.getDatabaseDriver().getSavingsBalance(pAddress));
+        mInstance.getClient().checkingAccountProperty().get().setBalance(mInstance.getDatabaseDriver().getCheckingBalance(pAddress));
 
         amount_to_ch.clear();
     }
-
 }

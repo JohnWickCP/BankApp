@@ -23,6 +23,5 @@
       <Label fx:id="pass_add_label" styleClass="login_container_label" text="Password:" />
       <PasswordField fx:id="pass_add_field" styleClass="input_filed" stylesheets="@../Styles/login.css" />
       <Button fx:id="login_button" mnemonicParsing="false" style="-fx-background-color: #132A13;" styleClass="login_form_container_but" stylesheets="@../Styles/login.css" text="Login" />
-      <Label fx:id="error_label" styleClass="error_lbl"  />
    </VBox>
 </AnchorPane>

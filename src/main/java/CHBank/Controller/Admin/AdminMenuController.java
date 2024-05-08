@@ -2,6 +2,7 @@ package CHBank.Controller.Admin;
 
 import CHBank.Models.Model;
 import CHBank.Views.AdminMenuOptions;
+import CHBank.Views.AlertMessage;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.stage.Stage;
@@ -15,6 +16,9 @@ public class AdminMenuController implements Initializable {
     public Button deposit_button;
     public Button logout_button;
 
+    Model model = Model.getInstance();
+    AlertMessage alertMessage = model.getView().getAlertMessage();
+
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
         addListener();
@@ -26,22 +30,22 @@ public class AdminMenuController implements Initializable {
         logout_button.setOnAction(_ -> onLogout());
     }
     private void onCreateClient(){
-        Model.getInstance().getView().getAdminSelectedMenuItem().set(AdminMenuOptions.CREATE_CLIENTS);
+        model.getView().getAdminSelectedOptions().set(AdminMenuOptions.CREATE_CLIENTS);
     }
     private void onClients(){
-        Model.getInstance().getView().getAdminSelectedMenuItem().set(AdminMenuOptions.CLIENTS);
+        model.getView().getAdminSelectedOptions().set(AdminMenuOptions.CLIENTS);
     }
     private void onDeposit() {
-        Model.getInstance().getView().getAdminSelectedMenuItem().set(AdminMenuOptions.DEPOSIT);
+        model.getView().getAdminSelectedOptions().set(AdminMenuOptions.DEPOSIT);
     }
     private void onLogout() {
-        // Get Stage
-        Stage stage = (Stage) clients_list_button.getScene().getWindow();
-        // Close the Admin window
-        Model.getInstance().getView().closeStage(stage);
-        // Show login window
-        Model.getInstance().getView().showLoginWindow();
-        // Set Amin login Success Flag to false
-        Model.getInstance().setAdminLoginSuccessFlag(false);
+        boolean confirmed = alertMessage.confirmMessage("Do you want to logout?");
+        if (confirmed){
+            Stage stage = (Stage) clients_list_button.getScene().getWindow();
+            model.getView().closeStage(stage);
+            model.getView().showLoginWindow();
+            model.setAdminLoginSuccessFlag(false);
+        }
+
     }
 }

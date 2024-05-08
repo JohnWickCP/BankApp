@@ -64,7 +64,7 @@
         <Label styleClass="new_trans_container_label" text="Amount" />
         <TextField fx:id="amount_filed" styleClass="new_trans_container_text_field" />
         <Label styleClass="new_trans_container_label" text="Message: (Optional)" />
-        <TextArea fx:id="message_field" prefHeight="70.0" prefWidth="200.0" styleClass="new_trans_container_text_field" />
+        <TextArea fx:id="message_field" prefHeight="70.0" prefWidth="200.0" styleClass="new_trans_container_text_field2" />
         <Button fx:id="send_money_but" mnemonicParsing="false" styleClass="new_trans_container_button" text="Send Money" />
     </VBox>
 </AnchorPane>

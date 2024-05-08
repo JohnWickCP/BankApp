@@ -140,6 +140,11 @@
     -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
 }
 
+.new_trans_container_text_field2{
+    -fx-pref-height: 80;
+    -fx-background-color: #FFFFFF;
+    -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);
+}
 .new_trans_container_button{
     -fx-background-color: linear-gradient(to right, #132A13, #253F25);
     -fx-effect: dropshadow(three-pass-box, #AAAAAA, 3, 0, 0, 3);

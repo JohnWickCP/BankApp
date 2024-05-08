@@ -2,110 +2,127 @@ package CHBank.Controller.Client;
 
 import CHBank.Models.Model;
 import CHBank.Models.Transaction;
+import CHBank.Views.AlertMessage;
 import CHBank.Views.TransactionCellFactory;
+import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
+import javafx.scene.control.DatePicker;
 import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.util.StringConverter;
 
 import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
 import java.time.LocalDate;
-import java.time.format.DateTimeParseException;
+import java.time.format.DateTimeFormatter;
 import java.util.ResourceBundle;
 
 public class TransactionController implements Initializable {
-
     public ListView<Transaction> transaction_Listview;
-    public TextField dayFrom_field;
-    public TextField dayTo_field;
-    public Button export_button;
+    public DatePicker dayFrom_field;
+    public DatePicker dayTo_field;
     public Button search_button;
+    public Button export_button;
+
+    Model model = Model.getInstance();
+    AlertMessage alertMessage = model.getView().getAlertMessage();
+    ObservableList<Transaction> searchedTrans ;
+
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        defaultSomething();
+        setDateFormat(dayFrom_field);
+        setDateFormat(dayTo_field);
+        updateListView();
         search_button.setOnAction(_ -> searchTransactions());
-        export_button.setOnAction(_ -> exportTransactions());
+        export_button.setOnAction(_ -> setExport_button());
     }
 
     private void initData(){
-        Model.getInstance().setAllTransactions();
+        model.setAllTransactions();
     }
-    public void defaultSomething(){
+
+    private void updateListView() {
         initData();
-        transaction_Listview.setItems(Model.getInstance().getAllTransactions());
+        transaction_Listview.setItems(model.getAllTransactions());
         transaction_Listview.setCellFactory(_ -> new TransactionCellFactory());
-
     }
 
-    // Method to handle search button action
-    public void searchTransactions() {
+    public void searchTransactions(){
+        LocalDate dayFrom = dayFrom_field.getValue();
+        LocalDate dayTo = dayTo_field.getValue();
+        LocalDate firstDayOf2000 = LocalDate.of(2000, 1, 1);
+        LocalDate today = LocalDate.now();
 
-        String fromText = dayFrom_field.getText().trim();
-        String toText = dayTo_field.getText().trim();
-
-        if (fromText.isEmpty() && toText.isEmpty()) {
-            defaultSomething(); // Refresh the page
+        if(dayFrom == null && dayTo == null){
+            updateListView();
             return;
         }
 
-        try {
-            LocalDate dayFrom = LocalDate.parse(fromText);
-            LocalDate dayTo = LocalDate.parse(toText);
-
-            if (dayFrom.isAfter(dayTo)) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Start date cannot be after end date.");
-                return;
-            }
-
-            transaction_Listview.setItems(Model.getInstance().searchTransactionsBetweenDates(dayFrom, dayTo));
-        } catch (DateTimeParseException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "Invalid date format. Please use YYYY-MM-DD format.");
+        if(dayFrom == null){
+            transaction_Listview.setItems(model.searchTransactionsBetweenDates(firstDayOf2000, today));
+            return;
         }
+
+        if(dayTo == null){
+            transaction_Listview.setItems(model.searchTransactionsBetweenDates(dayFrom, today));
+            return;
+        }
+
+        if (dayFrom.isAfter(dayTo)) {
+            alertMessage.errorMessage("Start date cannot be after end date.");
+            return;
+        }
+        searchedTrans = model.searchTransactionsBetweenDates(dayFrom, today);
+        transaction_Listview.setItems(searchedTrans);
     }
 
-    // Method to handle export button action
     public void exportTransactions() {
         try {
-            LocalDate dayFrom = LocalDate.parse(dayFrom_field.getText());
-            LocalDate dayTo = LocalDate.parse(dayTo_field.getText());
-
-            if (dayFrom.isAfter(dayTo)) {
-                showAlert(Alert.AlertType.ERROR, "Error", "Start date cannot be after end date.");
+            if(searchedTrans == null){
+                alertMessage.errorMessage("Nothing to export.");
                 return;
             }
-
-            String fileName = "transactions_" + dayFrom.toString() + "_to_" + dayTo.toString() + ".xlsx";
+            String fileName = "transactions_" + dayFrom_field.toString() + "_to_" + dayTo_field.toString() + ".csv";
             FileWriter writer = new FileWriter(fileName);
 
-            // Write header to CSV file
             writer.write("Sender,Receiver,Amount,Date,Message\n");
 
-            // Write transactions to CSV file
-            for (Transaction transaction : Model.getInstance().searchTransactionsBetweenDates(dayFrom, dayTo)) {
+            for (Transaction transaction : searchedTrans) {
                 writer.write(transaction.senderProperty().get() + ",");
                 writer.write(transaction.receiverProperty().get() + ",");
                 writer.write(transaction.amountProperty().get() + ",");
                 writer.write(transaction.dateProperty().get() + ",");
                 writer.write(transaction.messageProperty().get() + "\n");
             }
-
             writer.close();
-            showAlert(Alert.AlertType.INFORMATION, "Export Successful", "Transactions have been exported to " + fileName);
-        } catch (DateTimeParseException | IOException e) {
-            showAlert(Alert.AlertType.ERROR, "Error", "An error occurred while processing the request.");
+            alertMessage.successMessage("Transactions exported");
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 
-    // Method to show an alert
-    private void showAlert(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
+    public void setExport_button(){
+        boolean confirmed = alertMessage.confirmMessage("Do you want to export these/ this Transactions");
+        if (confirmed) {
+            exportTransactions();
+        }
+    }
+
+    private void setDateFormat(DatePicker datePicker) {
+        datePicker.setConverter(new StringConverter<>() {
+            final DateTimeFormatter dateFormatter = DateTimeFormatter.ofPattern("yyyy-MM-dd");
+
+            @Override
+            public String toString(LocalDate localDate) {
+                return localDate != null ? dateFormatter.format(localDate) : "";
+            }
+
+            @Override
+            public LocalDate fromString(String string) {
+                return string != null && !string.isEmpty() ? LocalDate.parse(string, dateFormatter) : null;
+            }
+        });
     }
 }

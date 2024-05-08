@@ -14,38 +14,35 @@ public class ClientMenuController implements Initializable {
     public Button transaction_but;
     public Button acc_but;
     public Button logout_but;
-    public Button report_but;
 
-
+    Model model = Model.getInstance();
     @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-        addListener();
-    }
+    public void initialize(URL url, ResourceBundle resourceBundle) {addListener();}
+
     public void addListener(){
-        dashboard_but.setOnAction(_ -> onDashboard());
-        transaction_but.setOnAction(_ -> onTransaction());
-        acc_but.setOnAction(_ -> onAccounts());
-        logout_but.setOnAction(_ -> onLogout());
+        dashboard_but.setOnAction(_ -> setDashboard_but());
+        transaction_but.setOnAction(_ -> setTransaction_but());
+        acc_but.setOnAction(_ -> setAcc_but());
+        logout_but.setOnAction(_ -> setLogout_but());
     }
-    private void onDashboard(){
-        Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.DASHBOARD);
+
+    private void setDashboard_but(){
+        model.getView().getClientSelectedOptions().set(ClientMenuOptions.DASHBOARD);
     }
-    private void onTransaction(){
-        Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.TRANSACTION);
+    private void setTransaction_but(){
+        model.getView().getClientSelectedOptions().set(ClientMenuOptions.TRANSACTION);
     }
-    private void onAccounts(){
-        Model.getInstance().getView().getClientSelectedMenuItem().set(ClientMenuOptions.ACCOUNTS);
+    private void setAcc_but(){
+        model.getView().getClientSelectedOptions().set(ClientMenuOptions.ACCOUNTS);
     }
-    private void onLogout() {
-        // Get Stage
-        Stage stage = (Stage) dashboard_but.getScene().getWindow();
-        // Close the client window
-        Model.getInstance().getView().closeStage(stage);
-        // Show login window
-        Model.getInstance().getView().showLoginWindow();
-        // Set Client login Success Flag to false
-        Model.getInstance().setClientLoginSuccessFlag(false);
+
+    private void setLogout_but(){
+        boolean confirmed = model.getView().getAlertMessage().confirmMessage("Do you want to logout?");
+        if(confirmed){
+            Stage stage = (Stage) dashboard_but.getScene().getWindow();
+            model.getView().closeStage(stage);
+            model.getView().showLoginWindow();
+            model.setClientLoginSuccessFlag(false);
+        }
     }
 }
-
-

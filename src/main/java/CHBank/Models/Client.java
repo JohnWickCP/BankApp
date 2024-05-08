@@ -8,26 +8,27 @@ import javafx.beans.property.StringProperty;
 import java.time.LocalDate;
 
 public class Client {
-    private final StringProperty firstName;
-    private final StringProperty lastName;
+    private final StringProperty fName;
+    private final StringProperty lName;
     private final StringProperty pAddress;
-    private final ObjectProperty<Account> checkingAccount;
-    private final ObjectProperty<Account> savingAccount;
+    private final ObjectProperty<CheckingAccount> checkingAccount;
+    private final ObjectProperty<SavingsAccount> savingsAccount;
     private final ObjectProperty<LocalDate> dateCreated;
 
-    public Client(String firstName, String lastName, String pAddress, Account checkingAccount, Account savingAccount, LocalDate dateCreated) {
-        this.firstName = new SimpleStringProperty(this, "FirstName", firstName);
-        this.lastName = new SimpleStringProperty(this, "LastName", lastName);
-        this.pAddress = new SimpleStringProperty(this, "Payee Address", pAddress);
-        this.savingAccount = new SimpleObjectProperty<>(this, "Saving Account", savingAccount);
-        this.checkingAccount = new SimpleObjectProperty<>(this, "Checking Account", checkingAccount);
-        this.dateCreated = new SimpleObjectProperty<>(this, "Date Created", dateCreated);
+    public Client(String fName, String lName, String pAddress, CheckingAccount checkingAccount, SavingsAccount savingsAccount, LocalDate dateCreated) {
+        this.fName = new SimpleStringProperty(fName);
+        this.lName = new SimpleStringProperty(lName);
+        this.pAddress = new SimpleStringProperty(pAddress);
+        this.checkingAccount = new SimpleObjectProperty<>(checkingAccount);
+        this.savingsAccount = new SimpleObjectProperty<>(savingsAccount);
+        this.dateCreated = new SimpleObjectProperty<>(dateCreated);
     }
 
-    public StringProperty FirstName() {return firstName;}
-    public StringProperty LastName() {return lastName;}
-    public StringProperty pAddress() {return pAddress;}
-    public ObjectProperty<Account> CheckingAccount() {return checkingAccount;}
-    public ObjectProperty<Account> SavingAccount() {return savingAccount;}
-    public ObjectProperty<LocalDate> DateCreated() {return dateCreated;}
+    public StringProperty fNameProperty() {return fName;}
+    public StringProperty lNameProperty() {return lName;}
+    public StringProperty pAddressProperty() {return pAddress;}
+    public ObjectProperty<CheckingAccount> checkingAccountProperty() {return checkingAccount;}
+    public ObjectProperty<SavingsAccount> savingsAccountProperty() {return savingsAccount;}
+    public ObjectProperty<LocalDate> dateCreatedProperty() {return dateCreated;}
+
 }

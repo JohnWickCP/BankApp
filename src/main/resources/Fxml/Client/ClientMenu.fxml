@@ -3,7 +3,6 @@
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon?>
 <?import java.lang.String?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.shape.Line?>
@@ -43,14 +42,6 @@
             </styleClass>
          </Button>
       </VBox>
-      <VBox prefHeight="120.0" prefWidth="130.0" styleClass="report_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0">
-         <Text strokeType="OUTSIDE" strokeWidth="0.0" styleClass="report_container_text" text="Report BUG" />
-         <Label styleClass="report_container_label" text="Press here to report" />
-         <Button fx:id="report_but" mnemonicParsing="false" styleClass="report_container_but" text="Report">
-            <graphic>
-               <FontAwesomeIcon glyphName="PLUS" />
-            </graphic>
-         </Button>
-      </VBox>
+      <VBox prefHeight="120.0" prefWidth="130.0" styleClass="report_container" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="14.0" AnchorPane.rightAnchor="14.0" />
    </AnchorPane>
 </VBox>

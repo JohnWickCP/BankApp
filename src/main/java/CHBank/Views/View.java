@@ -20,119 +20,131 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
-
 public class View {
     private AccountType loginAccountType;
-    // Client views
+    private final AlertMessage alertMessage;
 
-    private final ObjectProperty<ClientMenuOptions> clientSelectedMenuItem;
-    private AnchorPane dashboardView;
-    private AnchorPane transactionsView;
-    private AnchorPane accountsView;
+    // CLIENTS
+    private final ObjectProperty<ClientMenuOptions> clientSelectedOptions;
+    private AnchorPane dashboardPane;
+    private AnchorPane transactionsPane;
+    private AnchorPane accountPane;
 
-    // Admin views
-    private final ObjectProperty<AdminMenuOptions> adminSelectedMenuItem;
-    private AnchorPane createClientsView;
-    private AnchorPane clientsView;
-    private AnchorPane depositsView;
-    //
-    public View() {
+    // ADMIN
+    private final ObjectProperty<AdminMenuOptions> adminSelectedOptions;
+    private AnchorPane createAccountPane;
+    private AnchorPane clientsPane;
+    private AnchorPane depositPane;
+
+    public View(){
         this.loginAccountType = AccountType.CLIENT;
-        this.clientSelectedMenuItem = new SimpleObjectProperty<>();
-        this.adminSelectedMenuItem = new SimpleObjectProperty<>();
+        this.alertMessage = new AlertMessage();
+        this.clientSelectedOptions = new SimpleObjectProperty<>();
+        this.adminSelectedOptions = new SimpleObjectProperty<>();
     }
 
-    public AccountType getLoginAccountType() {
-        return loginAccountType;
-    }
+    public AccountType getLoginAccountType() {return loginAccountType;}
+    public void setLoginAccountType(AccountType loginAccountType) {this.loginAccountType = loginAccountType;}
 
-    public void setLoginAccountType(AccountType loginAccountType) {
-        this.loginAccountType = loginAccountType;
-    }
-    /* Client Views Section*/
-    public ObjectProperty<ClientMenuOptions> getClientSelectedMenuItem() {
-        return clientSelectedMenuItem;
-    }
+    public AlertMessage getAlertMessage() {return alertMessage;}
 
-    public AnchorPane getDashboardView() {
-        if (dashboardView == null) {
+    //CLIENT
+    public ObjectProperty<ClientMenuOptions> getClientSelectedOptions() {return clientSelectedOptions;}
+
+    public AnchorPane getDashboardPane() {
+        if(dashboardPane == null){
             try {
-                dashboardView = new FXMLLoader(getClass().getResource("/Fxml/Client/Dashboard.fxml")).load();
-                dashboardView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Dashboard.css")).toExternalForm());
-            } catch (Exception e) {
-                e.printStackTrace();
-            }
-        }
-        return dashboardView;
-    }
-
-    public AnchorPane getTransactionsView() {
-        if (transactionsView == null) {
-            try {
-                transactionsView = new FXMLLoader(getClass().getResource("/Fxml/Client/Transaction.fxml")).load();
-                transactionsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Transaction.css")).toExternalForm());
+                dashboardPane =  new FXMLLoader(getClass().getResource("/Fxml/Client/Dashboard.fxml")).load();
+                dashboardPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Dashboard.css")).toExternalForm());
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return transactionsView;
+        return dashboardPane;
     }
 
-    public AnchorPane getAccountsView() {
-        if (accountsView == null) {
+    public AnchorPane getTransactionPane() {
+        if (transactionsPane == null) {
             try {
-                accountsView = new FXMLLoader(getClass().getResource("/Fxml/Client/Accounts.fxml")).load();
-                accountsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Accounts.css")).toExternalForm());
+                transactionsPane = new FXMLLoader(getClass().getResource("/Fxml/Client/Transaction.fxml")).load();
+                transactionsPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Transaction.css")).toExternalForm());
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return accountsView;
+        return transactionsPane;
     }
 
-
-    /* Admin views section */
-    public ObjectProperty<AdminMenuOptions> getAdminSelectedMenuItem(){
-        return adminSelectedMenuItem;
+    public AnchorPane getAccountPane() {
+        if (accountPane == null) {
+            try {
+                accountPane = new FXMLLoader(getClass().getResource("/Fxml/Client/Accounts.fxml")).load();
+                accountPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Accounts.css")).toExternalForm());
+            } catch (Exception e){
+                e.printStackTrace();
+            }
+        }
+        return accountPane;
     }
+
+    //ADMIN
+    public ObjectProperty<AdminMenuOptions> getAdminSelectedOptions() {return adminSelectedOptions;}
 
     public AnchorPane getCreateClientsView() {
-        if (createClientsView == null) {
+        if (createAccountPane == null) {
             try {
-                createClientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/CreateClient.fxml")).load();
-                createClientsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/CreateClient.css")).toExternalForm());
+                createAccountPane = new FXMLLoader(getClass().getResource("/Fxml/Admin/CreateClient.fxml")).load();
+                createAccountPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/CreateClient.css")).toExternalForm());
             }
             catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return createClientsView;
+        return createAccountPane;
     }
 
     public AnchorPane getClientsView() {
-        if (clientsView == null) {
+        if (clientsPane == null) {
             try {
-                clientsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Clients.fxml")).load();
-                clientsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Clients.css")).toExternalForm());
+                clientsPane = new FXMLLoader(getClass().getResource("/Fxml/Admin/Clients.fxml")).load();
+                clientsPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Clients.css")).toExternalForm());
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return clientsView;
+        return clientsPane;
     }
 
     public AnchorPane getDepositsView() {
-        if (depositsView == null){
+        if (depositPane == null){
             try {
-                depositsView = new FXMLLoader(getClass().getResource("/Fxml/Admin/Deposit.fxml")).load();
-                depositsView.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Deposit.css")).toExternalForm());
+                depositPane = new FXMLLoader(getClass().getResource("/Fxml/Admin/Deposit.fxml")).load();
+                depositPane.getStylesheets().add(Objects.requireNonNull(getClass().getResource("/Styles/Deposit.css")).toExternalForm());
             } catch (Exception e){
                 e.printStackTrace();
             }
         }
-        return depositsView;
+        return depositPane;
     }
-    // Class trung gian
+
+    // Class Trung Gian
+    private void createStage(FXMLLoader loader, List<String> stylesheets) {
+        try {
+            Scene scene = new Scene(loader.load());
+            for (String stylesheet : stylesheets) {
+                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(stylesheet)).toExternalForm());
+            }
+            Stage stage = new Stage();
+            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/BankIcon.png"))));
+            stage.setResizable(false);
+            stage.setScene(scene);
+            stage.setTitle("CHBank");
+            stage.show();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
     public void showLoginWindow() {
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/Fxml/Login.fxml"));
         List<String> stylesheets = new ArrayList<>();
@@ -177,24 +189,8 @@ public class View {
         stage.setScene(scene);
         stage.show();
     }
-    private void createStage(FXMLLoader loader, List<String> stylesheets) {
-        try {
-            Scene scene = new Scene(loader.load());
-            for (String stylesheet : stylesheets) {
-                scene.getStylesheets().add(Objects.requireNonNull(getClass().getResource(stylesheet)).toExternalForm());
-            }
-            Stage stage = new Stage();
-            stage.getIcons().add(new Image(String.valueOf(getClass().getResource("/Images/BankIcon.png"))));
-            stage.setResizable(false);
-            stage.setScene(scene);
-            stage.setTitle("CHBank");
-            stage.show();
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
-    }
 
-    public void closeStage (Stage stage) {
+    public void closeStage(Stage stage) {
         stage.close();
     }
 }

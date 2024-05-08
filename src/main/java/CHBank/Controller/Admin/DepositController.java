@@ -2,10 +2,10 @@ package CHBank.Controller.Admin;
 
 import CHBank.Models.Client;
 import CHBank.Models.Model;
+import CHBank.Views.AlertMessage;
 import CHBank.Views.ClientCellFactory;
 import javafx.collections.ObservableList;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.control.TextField;
@@ -19,13 +19,15 @@ public class DepositController implements Initializable {
     public ListView<Client> result_listview;
     public TextField Amount_filed;
     public Button deposit_button;
-
     private Client client;
+
+    Model model = Model.getInstance();
+    AlertMessage alert = model.getView().getAlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
-        search_button.setOnAction(e -> onClientSearch());
-        deposit_button .setOnAction(e -> onDepositButtonClicked());
+        search_button.setOnAction(_ -> onClientSearch());
+        deposit_button .setOnAction(_ -> onDepositButtonClicked());
     }
 
 
@@ -33,25 +35,26 @@ public class DepositController implements Initializable {
         String address = pAddress_field.getText().trim();
 
         if (address.isEmpty()) {
-            showAlert("Please enter the client's address.");
+            alert.errorMessage("Please enter the client's address.");
             return;
         }
 
-        ObservableList<Client> searchResult = Model.getInstance().searchClients(address);
+        ObservableList<Client> searchResult = model.searchClients(address);
         if (searchResult.isEmpty()) {
-            showAlert("No client found with the given address.");
+            alert.errorMessage("No client found with the given address.");
             return;
         }
 
         result_listview.setItems(searchResult);
-        result_listview.setCellFactory(e -> new ClientCellFactory());
+        result_listview.setCellFactory(_ -> new ClientCellFactory());
         client = searchResult.getFirst();
     }
+
     public void onDepositButtonClicked() {
 
         String amountText = Amount_filed.getText().trim();
         if (amountText.isEmpty()) {
-            showAlert("Please enter the deposit amount.");
+            alert.errorMessage("Please enter the deposit amount.");
             return;
         }
         double amount;
@@ -59,20 +62,19 @@ public class DepositController implements Initializable {
         try {
             amount = Double.parseDouble(amountText);
         } catch (NumberFormatException e) {
-            showAlert("Please enter a valid number for the deposit amount.");
+            alert.errorMessage("Please enter a valid number for the deposit amount.");
             return;
         }
 
         if (amount <= 0) {
-            showAlert("Please enter a deposit amount greater than zero.");
+            alert.errorMessage("Please enter a deposit amount greater than zero.");
             return;
         }
 
-        double newBalance = amount + client.SavingAccount().get().balanceProperty().get();
-        Model.getInstance().getDatabaseDriver().depositSavings(client.pAddress().get(), newBalance);
+        double newBalance = amount + client.savingsAccountProperty().get().balanceProperty().get();
+        model.getDatabaseDriver().depositSavings(client.pAddressProperty().get(), newBalance);
 
-        showAlertReal(Alert.AlertType.INFORMATION, "Successfully", "Deposited " + amount + " to " + client.pAddress().get());
-
+        alert.successMessage("Successfully! Deposited " + amount + " to " + client.pAddressProperty().get());
         emptyFields();
     }
 
@@ -82,18 +84,4 @@ public class DepositController implements Initializable {
         Amount_filed.setText("");
     }
 
-    private void showAlert(String content) {
-        Alert alert = new Alert(Alert.AlertType.ERROR);
-        alert.setTitle("Error");
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
-    private void showAlertReal(Alert.AlertType type, String title, String content) {
-        Alert alert = new Alert(type);
-        alert.setTitle(title);
-        alert.setHeaderText(null);
-        alert.setContentText(content);
-        alert.showAndWait();
-    }
 }

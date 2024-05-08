@@ -14,18 +14,18 @@
     <HBox layoutX="11.0" layoutY="65.0" prefHeight="34.0" prefWidth="816.0">
         <Text strokeType="OUTSIDE" strokeWidth="0.0" text="Payee Address:" />
         <TextField fx:id="address_field" prefHeight="25.0" prefWidth="166.0" />
-        <Button fx:id="search_button" mnemonicParsing="false" prefHeight="28.0" prefWidth="70.0" text="Search">
-         <graphic>
-            <FontAwesomeIcon glyphName="SEARCH" size="1.2em" text="" />
-         </graphic></Button>
-      <Button fx:id="refresh_button" mnemonicParsing="false" prefHeight="34.0" prefWidth="161.0" text="Refresh All Limitations">
-         <graphic>
-            <FontAwesomeIcon glyphName="CIRCLE_ALT_NOTCH" />
-         </graphic>
-      </Button>
-        <Button fx:id="Delete_button" mnemonicParsing="false" prefHeight="29.0" prefWidth="68.0" style="-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF; -fx-font-weight: bold;" text="Delete">
-         <graphic>
-            <FontAwesomeIcon fill="#fffdfd" glyphName="TIMES" size="1.2em" text="" />
-         </graphic></Button>
+        <Button fx:id="search_button" mnemonicParsing="false" prefHeight="30.0" prefWidth="87.0" text="Search">
+            <graphic>
+                <FontAwesomeIcon fill="WHITE" glyphName="SEARCH" size="1.2em" text="" />
+            </graphic></Button>
+        <Button fx:id="refresh_button" mnemonicParsing="false" prefHeight="34.0" prefWidth="161.0" text="Refresh All Lims">
+            <graphic>
+                <FontAwesomeIcon fill="WHITE" glyphName="CIRCLE_ALT_NOTCH" text="" />
+            </graphic>
+        </Button>
+        <Button fx:id="Delete_button" mnemonicParsing="false" prefHeight="30.0" prefWidth="90.0" style="-fx-background-color: #FF0000; -fx-text-fill: #FFFFFF; -fx-font-weight: bold;" text="Delete">
+            <graphic>
+                <FontAwesomeIcon fill="#fffdfd" glyphName="TIMES" size="1.2em" text="" />
+            </graphic></Button>
     </HBox>
 </AnchorPane>

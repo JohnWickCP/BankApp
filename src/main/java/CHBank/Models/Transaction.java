@@ -25,5 +25,4 @@ public class Transaction  {
     public DoubleProperty amountProperty() {return this.amount;}
     public ObjectProperty<LocalDate> dateProperty() {return this.date;}
     public StringProperty messageProperty() {return this.message;}
-
 }
