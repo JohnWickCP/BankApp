@@ -214,17 +214,13 @@ public class DatabaseDriver {
         return rs;
     }
 
-    public void createClient(String fName, String lName, String address, String password, LocalDate date){
-        PreparedStatement ps ;
+    public void creteClient(String firstName, String lastName, String address, String password, LocalDate date) {
+        Statement statement;
         try {
-            String query = "INSERT INTO Clients(FirstName, LastName, PayeeAddress, Password, Date) VALUES (?, ?, ?, ?, ?)";
-            ps = this.conn.prepareStatement(query);
-            ps.setString(1, fName);
-            ps.setString(2, lName);
-            ps.setString(3, address);
-            ps.setString(4, password);
-            ps.setDate(5, Date.valueOf(date));
-            ps.executeUpdate();
+            statement = this.conn.createStatement();
+            statement.executeUpdate("INSERT INTO " +
+                    "Clients(FirstName, LastName, PayeeAddress, Password, Date)" +
+                    "VALUES ('"+firstName+"', '"+lastName+"', '"+address+"', '"+password+"', '"+date.toString()+"');");
         } catch (SQLException e){
             e.printStackTrace();
         }

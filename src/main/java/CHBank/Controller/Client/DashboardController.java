@@ -1,5 +1,6 @@
 package CHBank.Controller.Client;
 
+import CHBank.Models.Account;
 import CHBank.Models.Model;
 import CHBank.Models.Transaction;
 import CHBank.Views.AlertMessage;
@@ -47,6 +48,7 @@ public class DashboardController implements Initializable {
     private void updateTime() {
         Timeline timeline = new Timeline(new KeyFrame(Duration.seconds(1), _ -> {
            String currentTime = "Today, " + LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss"));
+           login_date.setText(currentTime);
         }));
         timeline.setCycleCount(Timeline.INDEFINITE);
         timeline.play();
@@ -72,76 +74,87 @@ public class DashboardController implements Initializable {
     }
 
     private void onSendMoney(){
-        String  receiver = payee_field.getText().trim();
+        String receiver = payee_field.getText().trim();
         String amountText = amount_filed.getText().trim();
         String message = message_field.getText();
         String sender = Model.getInstance().getClient().pAddressProperty().get();
-
-        double amount ;
-
-        if (receiver.isEmpty()) {
-            alertMessage.errorMessage("Please enter the recipient's name.");
-            return;
-        }
-
-        if (amountText.isEmpty()) {
-            alertMessage.errorMessage("Please enter the amount to send.");
-            return;
-        }
-
-        if(sender.equals(receiver)){
-            alertMessage.errorMessage("You can not transfer to yourself");
-            return;
-        }
-
-        try {
-            amount = Double.parseDouble(amountText);
-        } catch (NumberFormatException e) {
-            alertMessage.errorMessage("Please enter a valid number for the amount.");
-            return;
-        }
-
-        if (amount <= 0) {
-            alertMessage.errorMessage("Please enter an amount greater than zero.");
-            return;
-        }
-
-        int tLim = Model.getInstance().getDatabaseDriver().getTransactionLimit(sender);
+        String senderName =  Model.getInstance().getName(sender);
+        String receiverAddress = Model.getInstance().getName(receiver);
+        String mess = "Sender: " + sender +" "+ senderName + "\nReceiver: " + receiver +" "+ receiverAddress+"\nAmount: " + amountText +"\nDo you want to send money?";
 
 
-        ResultSet resultSet = Model.getInstance().searchClient(receiver);
-        if (resultSet == null) {
-            alertMessage.errorMessage("No client found with the given address.");
-            return;
-        }
-        try {
-            if (resultSet.isBeforeFirst()){
-                Model.getInstance().getDatabaseDriver().updateCheckingBalance(receiver, amount, "ADD");
+            double amount ;
+            double balance = Model.getInstance().getClient().checkingAccountProperty().get().balanceProperty().get();
+            if (receiver.isEmpty()) {
+                alertMessage.errorMessage("Please enter the recipient's name.");
+                return;
             }
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
 
-        if (tLim <= 0) {
-            alertMessage.errorMessage("Transaction limit exceeded");
-            return;
-        } else {
-            tLim -=1;
-            model.getDatabaseDriver().updateTransactionLimit(sender, tLim);
-            (model.getClient().checkingAccountProperty().get()).transactionLimitProperty().set(tLim);
-        }
+            if (amountText.isEmpty()) {
+                alertMessage.errorMessage("Please enter the amount to send.");
+                return;
+            }
+
+            if(sender.equals(receiver)){
+                alertMessage.errorMessage("You can not transfer to yourself");
+                return;
+            }
+
+            try {
+                amount = Double.parseDouble(amountText);
+            } catch (NumberFormatException e) {
+                alertMessage.errorMessage("Please enter a valid number for the amount.");
+                return;
+            }
+
+            if (amount <= 0) {
+                alertMessage.errorMessage("Please enter an amount greater than zero.");
+                return;
+            }
+
+            if (amount > balance){
+                alertMessage.errorMessage("You can not transfer more than balance.");
+                return;
+            }
+            int tLim = Model.getInstance().getDatabaseDriver().getTransactionLimit(sender);
 
 
-        model.getDatabaseDriver().updateCheckingBalance(sender, amount, "SUB");
-        model.getClient().checkingAccountProperty().get().setBalance(model.getDatabaseDriver().getCheckingBalance(sender));
-        model.getDatabaseDriver().newTransaction(sender, receiver, amount, message);
-        updateData();
-        alertMessage.successMessage("Transfer Successful " + "You have transferred " + amount + " to " + receiver);
+            ResultSet resultSet = Model.getInstance().searchClient(receiver);
+            if (resultSet == null) {
+                alertMessage.errorMessage("No client found with the given address.");
+                return;
+            }
+            try {
+                if (resultSet.isBeforeFirst()){
+                    Model.getInstance().getDatabaseDriver().updateCheckingBalance(receiver, amount, "ADD");
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
 
-        // Clear fields
-        payee_field.clear();
-        amount_filed.clear();
-        message_field.clear();
+            if (tLim <= 0) {
+                alertMessage.errorMessage("Transaction limit exceeded");
+                return;
+            } else {
+                tLim -=1;
+                model.getDatabaseDriver().updateTransactionLimit(sender, tLim);
+                (model.getClient().checkingAccountProperty().get()).transactionLimitProperty().set(tLim);
+            }
+        boolean confirmed = alertMessage.confirmMessage(mess);
+            if (confirmed) {
+
+                model.getDatabaseDriver().updateCheckingBalance(sender, amount, "SUB");
+                model.getClient().checkingAccountProperty().get().setBalance(model.getDatabaseDriver().getCheckingBalance(sender));
+                model.getDatabaseDriver().newTransaction(sender, receiver, amount, message);
+                updateData();
+                alertMessage.successMessage("Transfer Successful " + "You have transferred " + amount + " to " + receiver);
+
+                // Clear fields
+                payee_field.clear();
+                amount_filed.clear();
+                message_field.clear();
+            }
+
     }
 
     private void accountSummary(){

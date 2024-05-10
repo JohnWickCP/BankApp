@@ -7,13 +7,16 @@ public class CheckingAccount extends Account {
     // The number of transactions a client is allowed to do per day
     private final IntegerProperty transactionLimit;
 
-    public CheckingAccount(String owner,String accountNumber, double balance, int transactionLimit) {
+    public CheckingAccount(String owner, String accountNumber, double balance, int transactionLimit) {
         super(owner, accountNumber, balance);
         this.transactionLimit = new SimpleIntegerProperty(this, "Transaction Limit", transactionLimit);
     }
 
-    public IntegerProperty transactionLimitProperty() {return transactionLimit;}
-    public String toString(){
+    public IntegerProperty transactionLimitProperty() {
+        return transactionLimit;
+    }
+
+    public String toString() {
         return accountNumberProperty().get();
     }
 }

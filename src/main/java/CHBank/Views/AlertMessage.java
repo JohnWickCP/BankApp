@@ -3,7 +3,6 @@ package CHBank.Views;
 import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
-
 import java.util.Optional;
 
 public class AlertMessage {
@@ -35,9 +34,11 @@ public class AlertMessage {
         ButtonType buttonTypeCancel = new ButtonType("Cancel", ButtonBar.ButtonData.CANCEL_CLOSE);
         alert.getButtonTypes().setAll(buttonTypeOK, buttonTypeCancel);
 
+
         Optional<ButtonType> result = alert.showAndWait();
 
         return result.orElse(buttonTypeCancel) == buttonTypeOK;
     }
+
 
 }
