@@ -57,7 +57,7 @@ Sau khi tải dự án tự gitHub về
 - Chọn Properties.
 - Tại cửa sổ Properties, chọn Java Build Path từ menu bên trái.
 - Trong tab Libraries, chọn thư viện JavaFX22 (hoặc tên bạn đã chọn) và nhấn Edit....
-- Nhấn Add External JARs... và chọn tệp .jar của FontawesomeFX và SQLite JDBC từ thư mục dự án của bạn.
+- Nhấn Add External JARs... và chọn tệp .jar của FontawesomeFX và SQLite JDBC từ thư mục dự án đã tải.
 - Nhấn OK để xác nhận và đóng cửa sổ.
 
 ### Database
