@@ -53,10 +53,10 @@ public class CreateClientController implements Initializable {
     }
 
     private void onCreateClient(){
+
         if (createCheckingAccountFlag) {
             createAccount("Checking");
         }
-
         if (createSavingsAccountFlag) {
             createAccount("Savings");
         }
@@ -75,20 +75,27 @@ public class CreateClientController implements Initializable {
         }
     }
 
-    private void createAccount(String accountType){
+    private void createAccount(String accountType) {
         double balance = Double.parseDouble(check_amount_field.getText());
 
-        // Generate Account Number // Uncompleted
+        // Generate Account Number
         String firstSection = "3210";
-        String lastSection = Integer.toString((new Random()).nextInt(9999) + 1000);
-        String accountNumber = firstSection + " " + lastSection;
+        String lastSection;
+        String accountNumber;
+        boolean accountExists;
 
-        if(accountType.equals("Checking")){
+        do {
+            lastSection = Integer.toString((new Random()).nextInt(9999) + 1000);
+            accountNumber = firstSection + " " + lastSection;
+            // Kiểm tra xem tài khoản đã tồn tại trong cơ sở dữ liệu hay chưa
+            accountExists = Model.getInstance().getDatabaseDriver().isAccountExists(accountNumber, accountType);
+        } while (accountExists);
+
+        if (accountType.equals("Checking")) {
             Model.getInstance().getDatabaseDriver().createCheckingAccount(payeeAddress, accountNumber, 10, balance);
         } else {
             Model.getInstance().getDatabaseDriver().createSavingsAccount(payeeAddress, accountNumber, 2000, balance);
         }
-
     }
 
     private String createPayeeAddress() {
@@ -108,6 +115,7 @@ public class CreateClientController implements Initializable {
         firstname_filed.clear();
         lastname_file.clear();
         password_filed.clear();
+        pAddress_label.setText("");
         pAddress_box.setSelected(false);
         check_acc_box.setSelected(false);
         check_amount_field.clear();

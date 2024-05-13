@@ -397,6 +397,16 @@ public class DatabaseDriver {
         }
     }
 
+    public void setTransactionLimitAsDefault(){
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("UPDATE CheckingAccounts SET TransactionLimit = ?");
+            ps.setInt(1, 10);
+            ps.executeUpdate();
+        } catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
     public void updateWithdrawalLimit(String pAddress, double newLimit) {
         try {
             PreparedStatement statement = this.conn.prepareStatement("UPDATE SavingsAccounts SET WithdrawalLimit = ? WHERE Owner = ?");
@@ -407,4 +417,62 @@ public class DatabaseDriver {
             e.printStackTrace();
         }
     }
+
+    public void setWithdrawalLimitAsDefault(){
+        try {
+            PreparedStatement ps = this.conn.prepareStatement("UPDATE SavingsAccounts SET WithdrawalLimit = ?");
+            ps.setDouble(1, 2000);
+            ps.executeUpdate();
+        }   catch (SQLException e){
+            e.printStackTrace();
+        }
+    }
+
+    public ResultSet getCheckingAccountDataByAccountNumber(String accountNumber)  {
+
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT * FROM CheckingAccounts WHERE AccountNumber = ?";
+            statement = this.conn.prepareStatement(query);
+            statement.setString(1, accountNumber);
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public ResultSet getSavingsAccountDataByAccountNumber(String accountNumber)  {
+        PreparedStatement statement = null;
+        ResultSet resultSet = null;
+        try {
+            String query = "SELECT * FROM SavingsAccounts WHERE AccountNumber = ?";
+            statement = this.conn.prepareStatement(query);
+            statement.setString(1, accountNumber);
+            resultSet = statement.executeQuery();
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return resultSet;
+    }
+
+    public boolean isAccountExists(String accountNumber, String accountType) {
+        boolean exists = false;
+        try {
+            ResultSet resultSet = null;
+            if (accountType.equals("Checking")) {
+                resultSet = getCheckingAccountDataByAccountNumber(accountNumber);
+            } else if (accountType.equals("Savings")) {
+                resultSet = getSavingsAccountDataByAccountNumber(accountNumber);
+            }
+            if (resultSet != null && resultSet.next()) {
+                exists = true;
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return exists;
+    }
+
 }
