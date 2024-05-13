@@ -29,7 +29,7 @@ Sau khi tải dự án tự gitHub về
 
 ##### FontawesomeFx và SQLite JDBC
 
-1. Thư viện FontawesomeFx và SQLite JDBC đã có sẵ trong dự án và bây giờ bạn chỉ cần cài đặt nó
+1. Thư viện FontawesomeFx và SQLite JDBC đã có sẵn trong dự án và bây giờ bạn chỉ cần cài đặt nó
 
 2. Thêm thư viện vào dự án của bạn bằng cách thực hiện các bước sau:
    - Trong IDE của bạn, mở cài đặt dự án hoặc tùy chọn tương tự.
