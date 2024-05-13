@@ -1,11 +1,12 @@
 
-# Bank Application
+# Bank Application (Ứng dụng ngân hàng)
 
-Là một dự án Java với chủ đề là Bank Application phân cấp Admin - Client. Có sử dụng thư viện chủ đạo là JavaFx. Với phần UI được thiết kế thông qua Scene Builder và phần backend được xử lý thông qua mô hình MVC 
+Là một dự án Java với chủ đề là Bank Application phân cấp Admin - Client. Có sử dụng thư viện chủ đạo là JavaFx. Với phần UI được thiết kế thông qua Scene Builder và phần backend được xử lý thông qua mô hình MVC
 
-## Authors
+## Tác giả
 
-- [@JohnWickCP](https://github.com/JohnWickCP)
+- [Cao Xuân Phồn](https://github.com/JohnWickCP)
+- Nguyễn Trọng Hiển
 
 ## Hướng dẫn cài đặt JavaFX SDK và thư viện
 
@@ -15,7 +16,7 @@ Là một dự án Java với chủ đề là Bank Application phân cấp Admin
 
 2. Giải nén tệp tải về vào một vị trí thuận tiện trên máy tính của bạn.
 
-### Cài đặt thư viện cho IDE 
+### Cài đặt thư viện cho IDE
 Sau khi tải dự án tự gitHub về
 #### Đói với IDE InteliJ
 ##### JavaFX
@@ -29,7 +30,7 @@ Sau khi tải dự án tự gitHub về
 
 ##### FontawesomeFx và SQLite JDBC
 
-1. Thư viện FontawesomeFx và SQLite JDBC đã có sẵn trong dự án và bây giờ bạn chỉ cần cài đặt nó
+1. Thư viện FontawesomeFx và SQLite JDBC đã có sẵ trong dự án và bây giờ bạn chỉ cần cài đặt nó
 
 2. Thêm thư viện vào dự án của bạn bằng cách thực hiện các bước sau:
    - Trong IDE của bạn, mở cài đặt dự án hoặc tùy chọn tương tự.
@@ -51,10 +52,13 @@ Sau khi tải dự án tự gitHub về
 - Chọn tất cả các tệp .jar trong thư mục lib của thư mục JavaFX SDK 22.
 - Nhấn OK để xác nhận và đóng cửa sổ.
 
-#### FontawesomeFx và DatabaseLib 
+#### FontawesomeFx và DatabaseLib
 - Chuột phải vào tên dự án trong Eclipse.
 - Chọn Properties.
 - Tại cửa sổ Properties, chọn Java Build Path từ menu bên trái.
 - Trong tab Libraries, chọn thư viện JavaFX22 (hoặc tên bạn đã chọn) và nhấn Edit....
 - Nhấn Add External JARs... và chọn tệp .jar của FontawesomeFX và SQLite JDBC từ thư mục dự án của bạn.
 - Nhấn OK để xác nhận và đóng cửa sổ.
+
+### Database
+- Bạn cũng có thể tải SQLite để có thể dễ dàng xem xét cơ sở dữ liệu tại [đây](https://sqlitebrowser.org/dl/)
