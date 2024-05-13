@@ -18,7 +18,7 @@ Là một dự án Java với chủ đề là Bank Application phân cấp Admin
 
 ### Cài đặt thư viện cho IDE
 Sau khi tải dự án tự gitHub về
-#### Đói với IDE InteliJ
+#### Đối với IDE InteliJ
 ##### JavaFX
 1. Click chuột phải vào dự án -> Open Module Settings -> Add(+) -> Chọn 'Java' -> vào thư mục JavaFX22 mà bạn đã tải-> Chọn 'Lib' -> Chọn hết toàn bộ file -> Đặt tên là Javafx22 -> chuột phải chọn 'Add to Module'
 
