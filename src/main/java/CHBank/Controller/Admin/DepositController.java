@@ -71,11 +71,16 @@ public class DepositController implements Initializable {
             return;
         }
 
-        double newBalance = amount + client.savingsAccountProperty().get().balanceProperty().get();
-        model.getDatabaseDriver().depositSavings(client.pAddressProperty().get(), newBalance);
+        String pAddressName =  client.pAddressProperty().get();
+        boolean confirmed = alert.confirmMessage("Do you want to deposit " + amount +" to " + pAddressName + "?");
 
-        alert.successMessage("Successfully! Deposited " + amount + " to " + client.pAddressProperty().get());
-        emptyFields();
+        if (confirmed) {
+            double newBalance = amount + client.savingsAccountProperty().get().balanceProperty().get();
+            model.getDatabaseDriver().depositSavings(client.pAddressProperty().get(), newBalance);
+            alert.successMessage("Successfully! Deposited " + amount + " to " + pAddressName + ".");
+            emptyFields();
+        }
+
     }
 
 

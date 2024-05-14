@@ -1,6 +1,7 @@
 package CHBank.Controller.Admin;
 
 import CHBank.Models.Model;
+import CHBank.Views.AlertMessage;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
@@ -28,8 +29,10 @@ public class CreateClientController implements Initializable {
     public Label error_label;
 
     private String payeeAddress;
-    private boolean createCheckingAccountFlag= false;
+    
+    private boolean createCheckingAccountFlag = false;
     private boolean createSavingsAccountFlag = false;
+    private final AlertMessage alertMessage = Model.getInstance().getView().getAlertMessage();
 
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
@@ -54,6 +57,36 @@ public class CreateClientController implements Initializable {
 
     private void onCreateClient(){
 
+        if(firstname_filed.getText().isEmpty()){
+            error_label.setText("Please enter first name");
+            return;
+        }
+        if(lastname_file.getText().isEmpty()){
+            error_label.setText("Please enter last name");
+            return;
+        }
+        if(password_filed.getText().isEmpty()){
+            error_label.setText("Please enter password");
+            return;
+        }
+
+        if(check_amount_field.getText().isEmpty()){
+            error_label.setText("You need a checking account amount");
+            return;
+        }
+
+        if(save_amount_filed.getText().isEmpty()){
+            error_label.setText("You need a saving account amount");
+            return;
+        }
+
+        if(pAddress_box.isSelected()){
+            pAddress_label.setText("Address");
+        } else {
+            error_label.setText("You must select a valid address");
+            return;
+        }
+
         if (createCheckingAccountFlag) {
             createAccount("Checking");
         }
@@ -64,9 +97,14 @@ public class CreateClientController implements Initializable {
         String fName = firstname_filed.getText();
         String lName = lastname_file.getText();
         String pass = password_filed.getText();
-        Model.getInstance().getDatabaseDriver().creteClient(fName, lName, payeeAddress, pass, LocalDate.now());
-        Model.getInstance().getView().getAlertMessage().successMessage("Client created successfully");
-        emptyFields();
+
+        boolean confirmed = alertMessage.confirmMessage("Do you want to create a new client?");
+        if (confirmed) {
+            Model.getInstance().getDatabaseDriver().creteClient(fName, lName, payeeAddress, pass, LocalDate.now());
+            Model.getInstance().getView().getAlertMessage().successMessage("Client created successfully");
+            emptyFields();
+        }
+
     }
 
     private void  onCreatePayeeAddress(){
