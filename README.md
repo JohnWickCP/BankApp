@@ -18,7 +18,7 @@ Là một dự án Java với chủ đề là Bank Application phân cấp Admin
 
 ### Cài đặt thư viện cho IDE
 Sau khi tải dự án tự gitHub về
-#### Đói với IDE InteliJ
+#### Đối với IDE InteliJ
 ##### JavaFX
 1. Click chuột phải vào dự án -> Open Module Settings -> Add(+) -> Chọn 'Java' -> vào thư mục JavaFX22 mà bạn đã tải-> Chọn 'Lib' -> Chọn hết toàn bộ file -> Đặt tên là Javafx22 -> chuột phải chọn 'Add to Module'
 
@@ -57,7 +57,7 @@ Sau khi tải dự án tự gitHub về
 - Chọn Properties.
 - Tại cửa sổ Properties, chọn Java Build Path từ menu bên trái.
 - Trong tab Libraries, chọn thư viện JavaFX22 (hoặc tên bạn đã chọn) và nhấn Edit....
-- Nhấn Add External JARs... và chọn tệp .jar của FontawesomeFX và SQLite JDBC từ thư mục dự án của bạn.
+- Nhấn Add External JARs... và chọn tệp .jar của FontawesomeFX và SQLite JDBC từ thư mục dự án đã tải.
 - Nhấn OK để xác nhận và đóng cửa sổ.
 
 ### Database
